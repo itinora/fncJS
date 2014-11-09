@@ -1,4 +1,4 @@
 fncJS
 =====
 
-javascript framework for commoners
+JavaScript framework for commoners
