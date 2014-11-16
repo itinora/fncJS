@@ -1,4 +1,6 @@
-define(['core/fnc_object'], function (fncObject) {
+define(function (require) {
+    var fncObject = require('core/fnc_object');
+
     return function () {
         this.values = [];
 

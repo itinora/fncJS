@@ -1,4 +1,6 @@
-define(['ui_controls/panels/panel'], function (panel) {
+define(function (require) {
+    var panel = require('ui_controls/panels/panel');
+
     var grid = function (name, config) {
         if(name) {
             this.name = name;

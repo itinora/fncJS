@@ -1,3 +1,3 @@
-require(['ui_controls/globals/body', 'ui_controls/panels/grid'], function(body, grid){
-    new body(new grid('layout'));
+require(['ui_controls/globals/rootVisual', 'ui_controls/panels/grid'], function(rootVisual, grid){
+    body = new rootVisual(new grid());
 });
