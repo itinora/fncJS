@@ -4,8 +4,11 @@ define(function (require) {
     var rootVisual = function (child) {
         if(child) {
             this.child = child;
+        }
+
+        this.render = function() {
             var dom = document.getElementsByTagName('body')[0];
-            dom.appendChild(child.render());
+            dom.appendChild(this.child.render());
         }
     }
     rootVisual.prototype = new uiElement();

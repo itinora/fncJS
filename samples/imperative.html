@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../src/css/default.css" >
+</head>
+<body>
+    <script data-main="../src/js/main.js" src="../src/js/require-min.js"></script>
+    <script src="../src/js/fnc.js"></script>
+    <script>
+        fnc.main = function() {
+            require(['../js/ui_controls/panels/grid'], function(grid){
+                fnc.body.child = new grid('layoutRoot', {rows: 3, cols: 4});
+                fnc.body.render();
+            });
+        }
+    </script>
+</body>
+</html>
