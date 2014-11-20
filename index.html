@@ -9,7 +9,6 @@
   {% include post-header-home.html %}
 </div>
 <div class="post-excerpt-home">
-  {{ post.excerpt }}
-  <p class="text-right"><a href="{{ post.url | prepend:site.baseurl }}">Continue Reading &rarr;</a></p>
+  {{ post.content }}
 </div>
 {% endfor %}
