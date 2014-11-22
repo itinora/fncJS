@@ -1,4 +1,5 @@
 define(function (require) {
+    var uiElement = require('ui_controls/ui_element');
     var grid = require('ui_controls/panels/grid');
 
     return {
@@ -10,8 +11,14 @@ define(function (require) {
             }
 
             if (dom.tagName === 'GRID') {
-                return new grid(propertiesToBeAdded['id'], propertiesToBeAdded);
+                var containerObj = new grid(propertiesToBeAdded['id'], propertiesToBeAdded);
+                for(var i= 0, child; child = dom.children[i]; i++) {
+                    containerObj.children.push(this.createUiControl(child));
+                }
+                return  containerObj;
             }
+
+            return new uiElement();
         }
     }
 

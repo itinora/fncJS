@@ -13,17 +13,6 @@ define(function (require) {
             this.name = name;
         }
 
-        this.render = function() {
-            var elem = document.createElement(this.tag);
-            if(this.name) {
-                elem.setAttribute('id', this.name);
-            }
-            for(key in this.properties) {
-                elem.setAttribute(key, this.properties[key]);
-            }
-            return elem;
-        }
-
         this.getProperty = function(property) {
             return this.properties[key];
         }
@@ -36,6 +25,19 @@ define(function (require) {
         this.tag = 'div';
     };
     uiElement.prototype = new fncObject();
+    uiElement.prototype.render = function() {
+        var elem = document.createElement(this.tag);
+        if(this.name) {
+            elem.setAttribute('id', this.name);
+        }
+        for(key in this.properties) {
+            elem.setAttribute(key, this.properties[key]);
+        }
+        var height = this.properties['height'];
+        if(height) {}
+            elem.style.height = height + "px";
+        return elem;
+    };
     return uiElement;
 });
 

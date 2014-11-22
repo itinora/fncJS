@@ -6,7 +6,7 @@ define(function (require) {
         if(name) {
             this.name = name;
         }
-        this.children = fncObjectCollection;
+        this.children = new fncObjectCollection();
     }
     panel.prototype = new uiElement();
     return panel;
