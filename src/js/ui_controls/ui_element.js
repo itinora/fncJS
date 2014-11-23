@@ -1,7 +1,8 @@
 define(function (require) {
     var fncObject = require('../core/fnc_object');
 
-    var uiElement = function (name, publicProperties, privateProperties) {
+    var uiElement = function (tag, name, publicProperties, privateProperties) {
+        tag = tag || 'div';
         this.initialize = function(name, publicProperties, privateProperties) {
             uiElement.prototype.initialize.call(this, privateProperties);
             if(name) {
@@ -15,33 +16,49 @@ define(function (require) {
         }
 
         this.initialize(name, publicProperties, privateProperties);
-        this.tag = 'div';
+        this.tag = tag;
         this.dom = null;
     };
+
+    var addUIStyles = function() {
+        var elem = this.dom;
+        elem.style.height = (this.properties['height'] || 20) + "px";   //default height 20px
+        elem.style.width = (this.properties['width'] || 100) + "px";    //default width 100px
+        elem.style.position = "absolute";
+    };
+
+    var setDomNameAndProperties = function() {
+        if (this.name) {
+            this.dom.setAttribute('id', this.name);
+        }
+        for (var key in this.properties) {
+            this.dom.setAttribute(key, this.properties[key]);
+        }
+        return key;
+    };
+
+    var setPositionAndDimensionRelativeToParent = function() {
+        for(var key in this.properties){
+            if(key === "grid.row") {
+                var rowIndex = parseInt(this.properties[key]);
+                var grid = this["grid"];
+                this.dom.style.top = grid.rows[rowIndex].top + "px";
+            } else if(key === "grid.col") {
+                var colIndex = parseInt(this.properties[key]);
+                var grid = this["grid"];
+                this.dom.style.left = grid.cols[colIndex].left + "px";
+            }
+        }
+    };
+
     uiElement.prototype = new fncObject();
+
     uiElement.prototype.render = function() {
-        var elem = document.createElement(this.tag);
-        if(this.name) {
-            elem.setAttribute('id', this.name);
-        }
-        for(key in this.properties) {
-            elem.setAttribute(key, this.properties[key]);
-        }
-
-        //add the existing properties
-        for (var key in  this.properties) {
-            elem.setAttribute(key, this.properties[key])
-        }
-
-        //add common properties for ui elements
-        var height = this.properties['height'];
-        if(height) {}
-            elem.style.height = height + "px";
-        var width = this.properties['width'];
-        if(width) {}
-            elem.style.width = width + "px";
-
-        return elem;
+        this.dom = document.createElement(this.tag);
+        setDomNameAndProperties.call(this);
+        addUIStyles.call(this);
+        setPositionAndDimensionRelativeToParent.call(this);
+        return this.dom;
     };
     return uiElement;
 });

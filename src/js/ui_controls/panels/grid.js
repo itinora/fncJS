@@ -9,7 +9,7 @@ define(function (require) {
     }
     grid.prototype = new panel();
     grid.prototype.render = function() {
-        function parseCompositeProperty(propertyInDom, maxPropertyValue, toBeAddedTo, toBeAddedWithPropertyName) {
+        var parseCompositeProperty = function(propertyInDom, maxPropertyValue, toBeAddedTo, toBeAddedWithPropertyName) {
             var parts = propertyInDom.split(' ');
             var cummulativeValue = 0;
             for (var i = 0, part; part = parts[i]; i++) {
@@ -37,15 +37,35 @@ define(function (require) {
             if (cummulativeValue > 0) {
                 this.dom.style[toBeAddedWithPropertyName] = cummulativeValue +  'px';
             }
+        };
+
+        var parseRowHeights = function() {
+            parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.properties['height']), this.rows, 'height');
+            var rows = this["rows"];
+            var currentTop = 0;
+            for(var i= 0, row; row= rows[i]; i++) {
+                row["top"] = currentTop;
+                currentTop = currentTop + row["height"];
+            }
+        }
+
+        var parseColWidths = function() {
+            parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.properties['width']), this.cols, 'width');
+            var cols = this["cols"];
+            var currentLeft = 0;
+            for(var i= 0, col; col= cols[i]; i++) {
+                col["left"] = currentLeft;
+                currentLeft = currentLeft + col["width"];
+            }
         }
 
 
-        //create base elem as per parent
-        this.dom = panel.prototype.render.call(this);
+        //create this.dom as per parent
+        panel.prototype.render.call(this);
 
         //parse grid specific properties
-        parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.properties['height']), this.rows, 'height');
-        parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.properties['width']), this.cols, 'width');
+        parseRowHeights.call(this);
+        parseColWidths.call(this);
 
         this.renderChildren();
         return this.dom;
