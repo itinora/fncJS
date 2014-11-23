@@ -26,13 +26,17 @@ define(function (require) {
         elem.style.height = (this.properties['height'] || 20) + "px";   //default height 20px
         elem.style.width = (this.properties['width'] || 100) + "px";    //default width 100px
         elem.style.position = "absolute";
+        elem.style.textAlign = "center";
+        elem.style.boxSizing = "border-box";
     };
 
     var setDomNameValueAndProperties = function() {
         if (this.name) {
             this.dom.setAttribute('id', this.name);
         }
-        if(this.tag !== 'input') {
+        if(this.tag === 'input') {
+            this.dom.setAttribute('value', this.dom.getAttribute('value'));
+        } else {
             this.dom.innerText = this.value;
         }
         for (var key in this.properties) {
@@ -43,14 +47,19 @@ define(function (require) {
 
     var setPositionAndDimensionRelativeToParent = function() {
         for(var key in this.properties){
+            var style = this.dom.style;
             if(key === "grid.row") {
                 var rowIndex = parseInt(this.properties[key]);
                 var grid = this["grid"];
-                this.dom.style.top = grid.rows[rowIndex].top + "px";
+                style.top = grid.rows[rowIndex].top + "px";
+                if(this.dom.tagName !== 'SELECT' && this.dom.getAttribute('type') !== 'radio') { //for radio buttons and select controls if height and width are set it shows up big in size
+                    style.height = grid.rows[rowIndex].height + "px";
+                }
             } else if(key === "grid.col") {
                 var colIndex = parseInt(this.properties[key]);
                 var grid = this["grid"];
-                this.dom.style.left = grid.cols[colIndex].left + "px";
+                style.left = grid.cols[colIndex].left + "px";
+                style.width = grid.cols[colIndex].width + "px";
             }
         }
     };

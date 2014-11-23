@@ -14,6 +14,12 @@ define(function (require) {
 
         var input = document.createElement('input');
         input.setAttribute('type', 'text');
+        var placeholder = this.properties['placeholder'];
+        if(placeholder) {
+            input.setAttribute('placeholder', placeholder);
+        }
+        input.style.width = this.dom.style.width;
+        input.style.boxSizing = this.dom.style.boxSizing;
         this.dom.appendChild(input);
 
         return this.dom;
