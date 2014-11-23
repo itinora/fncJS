@@ -2,8 +2,8 @@ define(function (require) {
     var uiElement = require('../ui_element');
     var fncObjectCollection = require('../../core/fnc_object_collection');
 
-    var panel = function (name, properties) {
-        this.initialize(name, properties);
+    var panel = function (name, publicProperties, privateProperties) {
+        this.initialize(name, publicProperties, privateProperties);
         this.children = new fncObjectCollection();
     }
     panel.prototype = new uiElement();

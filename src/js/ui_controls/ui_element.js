@@ -1,26 +1,20 @@
 define(function (require) {
     var fncObject = require('../core/fnc_object');
 
-    var private = {};
-    private.parseDOM = function(){
-        return {
-            /* return values based on what is specified in the html by the user*/
-        }
-    }
-
-    var uiElement = function (name, properties) {
-        this.initialize = function(name, properties) {
+    var uiElement = function (name, publicProperties, privateProperties) {
+        this.initialize = function(name, publicProperties, privateProperties) {
+            uiElement.prototype.initialize.call(this, privateProperties);
             if(name) {
                 this.name = name;
             }
-            this.properties = properties || {};
+            this.properties = publicProperties || {};
         }
 
         this.getProperty = function(property) {
-            return this.properties[key];
+            return this.properties[property];
         }
 
-        this.initialize(name, properties);
+        this.initialize(name, publicProperties, privateProperties);
         this.tag = 'div';
         this.dom = null;
     };

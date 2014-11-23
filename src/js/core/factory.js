@@ -4,23 +4,24 @@ define(function (require) {
     var textbox = require('ui_controls/input_controls/textbox');
 
     return {
-        createUiControl: function (dom) {
-            var propertiesToBeAdded = {};
+        createUiControl: function (dom, publicProperties, privateProperties) {
+            publicProperties = publicProperties || {};
+            privateProperties = privateProperties || {};
             var attributes = dom.attributes;
             for (var i = 0, attr; attr = attributes[i]; i++){
-                propertiesToBeAdded[attr.name] = attr.value;
+                publicProperties[attr.name] = attr.value;
             }
 
             var controlObject = new uiElement();
             if (dom.tagName === 'GRID') {
-                controlObject = new grid(propertiesToBeAdded['id'], propertiesToBeAdded);
+                controlObject = new grid(publicProperties['id'], publicProperties, privateProperties);
                 for(var i= 0, child; child = dom.children[i]; i++) {
-                    controlObject.children.push(this.createUiControl(child));
+                    controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
                 }
             } else if (dom.tagName === 'TEXTBOX') {
-                controlObject = new textbox(propertiesToBeAdded['id'], propertiesToBeAdded);
+                controlObject = new textbox(publicProperties['id'], publicProperties, privateProperties);
             } else if (dom.tagName === 'DIV') {
-                controlObject = new uiElement(propertiesToBeAdded['id'], propertiesToBeAdded);
+                controlObject = new uiElement(publicProperties['id'], publicProperties, privateProperties);
             }
 
             return controlObject;

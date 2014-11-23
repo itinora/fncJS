@@ -1,8 +1,8 @@
 define(function (require) {
     var panel = require('ui_controls/panels/panel');
 
-    var grid = function (name, properties) {
-        this.initialize(name, properties);
+    var grid = function (name, publicProperties, privateProperties) {
+        this.initialize(name, publicProperties, privateProperties);
         this.tag = "grid";
         this.rows = [];
         this.cols = [];
@@ -11,31 +11,31 @@ define(function (require) {
     grid.prototype.render = function() {
         function parseCompositeProperty(propertyInDom, maxPropertyValue, toBeAddedTo, toBeAddedWithPropertyName) {
             var parts = propertyInDom.split(' ');
-            var commulativeValue = 0;
+            var cummulativeValue = 0;
             for (var i = 0, part; part = parts[i]; i++) {
                 var partNumeric = parseInt(part);
                 if (part.indexOf('%') > -1) {    //value is in percentage
                     if(maxPropertyValue > 0) {
                         var currentValue = partNumeric * maxPropertyValue / 100;
-                        commulativeValue = commulativeValue + currentValue;
+                        cummulativeValue = cummulativeValue + currentValue;
                         var prop = {};
-                        prop[toBeAddedWithPropertyName] = currentValue
+                        prop[toBeAddedWithPropertyName] = currentValue;
                         toBeAddedTo.push(prop);
                     }
                 } else if (part === '*') {  //add the remaining value to this part
                     var prop = {};
-                    prop[toBeAddedWithPropertyName] =  maxPropertyValue - commulativeValue;
+                    prop[toBeAddedWithPropertyName] =  maxPropertyValue - cummulativeValue;
                     toBeAddedTo.push(prop);
-                    commulativeValue = maxPropertyValue;
+                    cummulativeValue = maxPropertyValue;
                 } else {    //number in pixel
-                    commulativeValue = commulativeValue + partNumeric;
+                    cummulativeValue = cummulativeValue + partNumeric;
                     var prop = {};
-                    prop[toBeAddedWithPropertyName] = partNumeric
+                    prop[toBeAddedWithPropertyName] = partNumeric;
                     toBeAddedTo.push(prop);
                 }
             }
-            if (commulativeValue > 0) {
-                this.dom.style[toBeAddedWithPropertyName] = commulativeValue +  'px';
+            if (cummulativeValue > 0) {
+                this.dom.style[toBeAddedWithPropertyName] = cummulativeValue +  'px';
             }
         }
 
