@@ -2,14 +2,8 @@ define(function (require) {
     var panel = require('ui_controls/panels/panel');
 
     var grid = function (name, properties) {
-        if(name) {
-            this.name = name;
-        }
-        properties = properties || {};
-        this.tag = 'grid';
-        for (var key in  properties) {
-            this.properties[key] = properties[key];
-        }
+        this.initialize(name, properties);
+        this.tag = "grid";
         this.rows = [];
         this.cols = [];
     }
@@ -41,28 +35,20 @@ define(function (require) {
                 }
             }
             if (commulativeValue > 0) {
-                elem.style[toBeAddedWithPropertyName] = commulativeValue +  'px';
+                this.dom.style[toBeAddedWithPropertyName] = commulativeValue +  'px';
             }
         }
 
 
         //create base elem as per parent
-        var elem = panel.prototype.render.call(this);
-
-        //add the existing properties
-        for (var key in  this.properties) {
-            elem.setAttribute(key, this.properties[key])
-        }
+        this.dom = panel.prototype.render.call(this);
 
         //parse grid specific properties
         parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.properties['height']), this.rows, 'height');
         parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.properties['width']), this.cols, 'width');
-        for(var i= 0, child; child = this.children.get(i); i++) {
-            elem.appendChild(child.render());
-        }
 
-
-        return elem;
+        this.renderChildren();
+        return this.dom;
     };
     return grid;
 });

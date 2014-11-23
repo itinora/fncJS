@@ -19,6 +19,8 @@ define(function (require) {
                 }
             } else if (dom.tagName === 'TEXTBOX') {
                 controlObject = new textbox(propertiesToBeAdded['id'], propertiesToBeAdded);
+            } else if (dom.tagName === 'DIV') {
+                controlObject = new uiElement(propertiesToBeAdded['id'], propertiesToBeAdded);
             }
 
             return controlObject;
