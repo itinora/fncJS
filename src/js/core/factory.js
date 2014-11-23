@@ -21,9 +21,9 @@ define(function (require) {
             } else if (dom.tagName === 'TEXTBOX') {
                 controlObject = new textbox(publicProperties['id'], publicProperties, privateProperties);
             } else if (dom.tagName === 'DIV') {
-                controlObject = new uiElement('div', publicProperties['id'], publicProperties, privateProperties);
+                controlObject = new uiElement('div', publicProperties['id'], dom.innerText, publicProperties, privateProperties);
             } else { //use the tag as given
-                controlObject = new uiElement(dom.tagName.toLowerCase(), publicProperties['id'], publicProperties, privateProperties);
+                controlObject = new uiElement(dom.tagName.toLowerCase(), publicProperties['id'], dom.innerText, publicProperties, privateProperties);
             }
 
             return controlObject;

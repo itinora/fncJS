@@ -1,7 +1,7 @@
 define(function (require) {
     var fncObject = require('../core/fnc_object');
 
-    var uiElement = function (tag, name, publicProperties, privateProperties) {
+    var uiElement = function (tag, name, value, publicProperties, privateProperties) {
         tag = tag || 'div';
         this.initialize = function(name, publicProperties, privateProperties) {
             uiElement.prototype.initialize.call(this, privateProperties);
@@ -17,6 +17,7 @@ define(function (require) {
 
         this.initialize(name, publicProperties, privateProperties);
         this.tag = tag;
+        this.value = value || '';
         this.dom = null;
     };
 
@@ -27,9 +28,12 @@ define(function (require) {
         elem.style.position = "absolute";
     };
 
-    var setDomNameAndProperties = function() {
+    var setDomNameValueAndProperties = function() {
         if (this.name) {
             this.dom.setAttribute('id', this.name);
+        }
+        if(this.tag !== 'input') {
+            this.dom.innerText = this.value;
         }
         for (var key in this.properties) {
             this.dom.setAttribute(key, this.properties[key]);
@@ -55,7 +59,7 @@ define(function (require) {
 
     uiElement.prototype.render = function() {
         this.dom = document.createElement(this.tag);
-        setDomNameAndProperties.call(this);
+        setDomNameValueAndProperties.call(this);
         addUIStyles.call(this);
         setPositionAndDimensionRelativeToParent.call(this);
         return this.dom;
