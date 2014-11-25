@@ -1,5 +1,7 @@
 define(function (require) {
+    var fncObjectCollection = require('core/fnc_object_collection');
     var uiElement = require('ui_controls/ui_element');
+    var html5Control = require('ui_controls/html5_control');
     var grid = require('ui_controls/panels/grid');
     var textbox = require('ui_controls/input_controls/textbox');
     var radiobutton = require('ui_controls/input_controls/radiobutton');
@@ -26,7 +28,13 @@ define(function (require) {
             } else if (dom.tagName === 'DIV') {
                 controlObject = new uiElement('div', publicProperties['id'], dom.innerText, publicProperties, privateProperties);
             } else { //use the tag as given
-                controlObject = new uiElement(dom.tagName.toLowerCase(), publicProperties['id'], dom.innerText, publicProperties, privateProperties);
+                controlObject = new html5Control(dom.tagName.toLowerCase(), publicProperties['id'], dom.innerText, publicProperties, privateProperties);
+                if(dom.children.length > 0) {
+                    controlObject.children = new fncObjectCollection();
+                    for(var i= 0, child; child = dom.children[i]; i++) {
+                        controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
+                    }
+                }
             }
 
             return controlObject;
