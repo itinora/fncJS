@@ -3,6 +3,7 @@ define(function (require) {
     var uiElement = require('ui_controls/ui_element');
     var html5Control = require('ui_controls/html5_control');
     var grid = require('ui_controls/panels/grid');
+    var stackpanel = require('ui_controls/panels/stackpanel');
     var textbox = require('ui_controls/input_controls/textbox');
     var radiobutton = require('ui_controls/input_controls/radiobutton');
 
@@ -18,6 +19,11 @@ define(function (require) {
             var controlObject = new uiElement();
             if (dom.tagName === 'GRID') {
                 controlObject = new grid(publicProperties['id'], publicProperties, privateProperties);
+                for(var i= 0, child; child = dom.children[i]; i++) {
+                    controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
+                }
+            } else if (dom.tagName === 'STACKPANEL') {
+                controlObject = new stackpanel(publicProperties['id'], publicProperties, privateProperties);
                 for(var i= 0, child; child = dom.children[i]; i++) {
                     controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
                 }

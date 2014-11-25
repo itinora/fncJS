@@ -34,10 +34,12 @@ define(function (require) {
         if (this.name) {
             this.dom.setAttribute('id', this.name);
         }
-        if(this.tag === 'input') {
-            this.dom.setAttribute('value', this.dom.getAttribute('value'));
-        } else {
-            this.dom.innerText = this.value;
+        if(this.children === undefined) {
+            if (this.tag === 'input') {
+                this.dom.setAttribute('value', this.dom.getAttribute('value'));
+            } else {
+                this.dom.innerText = this.value;
+            }
         }
         for (var key in this.properties) {
             this.dom.setAttribute(key, this.properties[key]);
