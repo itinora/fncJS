@@ -9,25 +9,26 @@ define(function (require) {
                 this.name = name;
             }
             this.properties = publicProperties || {};
-        }
+        };
 
         this.getProperty = function(property) {
             return this.properties[property];
-        }
+        };
+
+        this.applyExplicitStyles = function() {
+            var elem = this.dom;
+            if(this.properties['height']) {
+                elem.style.height = this.properties['height'] + "px";
+            }
+            if(this.properties['width']) {
+                elem.style.width = this.properties['width'] + "px";
+            }
+        };
 
         this.initialize(name, publicProperties, privateProperties);
         this.tag = tag;
         this.value = value || '';
         this.dom = null;
-    };
-
-    var addUIStyles = function() {
-        var elem = this.dom;
-        elem.style.height = (this.properties['height'] || 20) + "px";   //default height 20px
-        elem.style.width = (this.properties['width'] || 100) + "px";    //default width 100px
-        elem.style.position = "absolute";
-        elem.style.textAlign = "center";
-        elem.style.boxSizing = "border-box";
     };
 
     var setDomNameValueAndProperties = function() {
@@ -96,12 +97,21 @@ define(function (require) {
         }
     };
 
+    var applyDefaultUIStyles = function() {
+        var elem = this.dom;
+        elem.style.height = "20px";   //default height 20px
+        elem.style.width = "100px";    //default width 100px
+        elem.style.position = "absolute";
+        elem.style.textAlign = "center";
+        elem.style.boxSizing = "border-box";
+    };
+
     uiElement.prototype = new fncObject();
 
     uiElement.prototype.render = function() {
         this.dom = document.createElement(this.tag);
         setDomNameValueAndProperties.call(this);
-        addUIStyles.call(this);
+        applyDefaultUIStyles.call(this);
         setPositionAndDimensionRelativeToParent.call(this);
         return this.dom;
     };

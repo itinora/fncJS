@@ -47,6 +47,7 @@ define(function (require) {
 
         this.renderChildren();
         setChildrenOrientation.call(this);
+        panel.prototype.applyExplicitStyles.call(this);
         return this.dom;
     };
     return stackpanel;
