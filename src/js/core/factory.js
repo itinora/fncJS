@@ -4,6 +4,7 @@ define(function (require) {
     var html5Control = require('ui_controls/html5_control');
     var grid = require('ui_controls/panels/grid');
     var stackpanel = require('ui_controls/panels/stackpanel');
+    var wrappanel = require('ui_controls/panels/wrappanel');
     var textbox = require('ui_controls/input_controls/textbox');
     var radiobutton = require('ui_controls/input_controls/radiobutton');
 
@@ -27,12 +28,15 @@ define(function (require) {
                 for(var i= 0, child; child = dom.children[i]; i++) {
                     controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
                 }
+            } else if (dom.tagName === 'WRAPPANEL') {
+                controlObject = new wrappanel(publicProperties['id'], publicProperties, privateProperties);
+                for(var i= 0, child; child = dom.children[i]; i++) {
+                    controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
+                }
             } else if (dom.tagName === 'TEXTBOX') {
                 controlObject = new textbox(publicProperties['id'], publicProperties, privateProperties);
             } else if (dom.tagName === 'RADIOBUTTON') {
                 controlObject = new radiobutton(publicProperties['id'], publicProperties, privateProperties);
-            } else if (dom.tagName === 'DIV') {
-                controlObject = new uiElement('div', publicProperties['id'], dom.innerText, publicProperties, privateProperties);
             } else { //use the tag as given
                 controlObject = new html5Control(dom.tagName.toLowerCase(), publicProperties['id'], dom.innerText, publicProperties, privateProperties);
                 if(dom.children.length > 0) {

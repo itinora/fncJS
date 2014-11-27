@@ -11,3 +11,19 @@ stackpanel {
     height: 200px;
     display: flex;
 }
+
+wrappanel {
+    background: lightgray;
+    width: 300px;
+    height: 200px;
+    display: flex;
+}
+
+div, label, radiobutton, textbox {
+    border-radius: 2px;
+    border: solid 1px gray;
+}
+
+radiobutton label {
+    border: none;
+}
