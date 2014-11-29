@@ -40,22 +40,26 @@ define(function (require) {
         };
 
         var parseRowHeights = function() {
-            parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.properties['height']), this.rows, 'height');
-            var rows = this["rows"];
-            var currentTop = 0;
-            for(var i= 0, row; row= rows[i]; i++) {
-                row["top"] = currentTop;
-                currentTop = currentTop + row["height"];
+            if(this.properties['rowheights']) {
+                parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.properties['height']), this.rows, 'height');
+                var rows = this["rows"];
+                var currentTop = 0;
+                for (var i = 0, row; row = rows[i]; i++) {
+                    row["top"] = currentTop;
+                    currentTop = currentTop + row["height"];
+                }
             }
         }
 
         var parseColWidths = function() {
-            parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.properties['width']), this.cols, 'width');
-            var cols = this["cols"];
-            var currentLeft = 0;
-            for(var i= 0, col; col= cols[i]; i++) {
-                col["left"] = currentLeft;
-                currentLeft = currentLeft + col["width"];
+            if(this.properties['colwidths']) {
+                parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.properties['width']), this.cols, 'width');
+                var cols = this["cols"];
+                var currentLeft = 0;
+                for (var i = 0, col; col = cols[i]; i++) {
+                    col["left"] = currentLeft;
+                    currentLeft = currentLeft + col["width"];
+                }
             }
         }
 

@@ -22,7 +22,10 @@ define(function (require) {
     }
     rootVisual.prototype = new uiElement();
     rootVisual.prototype.render = function() {
-        this.dom.removeChild(this.dom.getElementsByTagName(this.child.tag)[0]);
+        var child = this.dom.getElementsByTagName(this.child.tag)[0];
+        if(child) {
+            this.dom.removeChild(child);
+        }
         this.dom.appendChild(this.child.render());
     };
     return rootVisual;
