@@ -19,6 +19,10 @@ define(function (require) {
         if(placeholder) {
             input.setAttribute('placeholder', placeholder);
         }
+        var value = this.properties['value'];
+        if(value) {
+            input.setAttribute('value', value);
+        }
         input.style.width = this.dom.style.width;
         input.style.boxSizing = this.dom.style.boxSizing;
         this.dom.appendChild(input);
