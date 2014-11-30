@@ -70,6 +70,7 @@ define(function (require) {
         //parse grid specific properties
         parseRowHeights.call(this);
         parseColWidths.call(this);
+        panel.prototype.applyExplicitStyles.call(this);
 
         this.renderChildren();
         return this.dom;
