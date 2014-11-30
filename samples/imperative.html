@@ -10,7 +10,7 @@
     <script>
         fnc.main = function() {
             require(['../js/ui_controls/panels/grid'], function(grid){
-                fnc.body.child = new grid('layoutRoot', {rows: 3, cols: 4});
+                fnc.body.child = new grid('layoutRoot', {rows: 3, cols: 4, width: 350, height: 300});
                 fnc.body.render();
             });
         }
