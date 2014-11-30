@@ -93,6 +93,12 @@ define(function (require) {
                 }
 
                 style.width = width + "px";
+            }else if(key === "f-canvas.left") {
+                var left = parseInt(this.properties[key]);
+                style.left = left + "px";
+            }else if(key === "f-canvas.top") {
+                var top = parseInt(this.properties[key]);
+                style.top = top + "px";
             }
         }
     };

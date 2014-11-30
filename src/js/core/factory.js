@@ -5,6 +5,7 @@ define(function (require) {
     var grid = require('ui_controls/panels/grid');
     var stackpanel = require('ui_controls/panels/stackpanel');
     var wrappanel = require('ui_controls/panels/wrappanel');
+    var f_canvas = require('ui_controls/panels/f_canvas');
     var textbox = require('ui_controls/input_controls/textbox');
     var radiobutton = require('ui_controls/input_controls/radiobutton');
 
@@ -30,6 +31,11 @@ define(function (require) {
                 }
             } else if (dom.tagName === 'WRAPPANEL') {
                 controlObject = new wrappanel(publicProperties['id'], publicProperties, privateProperties);
+                for(var i= 0, child; child = dom.children[i]; i++) {
+                    controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
+                }
+            } else if (dom.tagName === 'F-CANVAS') {
+                controlObject = new f_canvas(publicProperties['id'], publicProperties, privateProperties);
                 for(var i= 0, child; child = dom.children[i]; i++) {
                     controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
                 }
