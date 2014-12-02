@@ -1,18 +1,4 @@
-grid {
-    background: lightgray;
-    width: 300px;
-    height: 200px;
-    display: flex;
-}
-
-stackpanel {
-    background: lightgray;
-    width: 300px;
-    height: 200px;
-    display: flex;
-}
-
-wrappanel {
+grid, stackpanel, wrappanel, f-canvas {
     background: lightgray;
     width: 300px;
     height: 200px;
