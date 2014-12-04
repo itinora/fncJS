@@ -1,5 +1,5 @@
-define(function (require) {
-    var panel = require('ui_controls/panels/panel');
+fnc.uiControls.panels.wrappanel = (function () {
+    var panel = fnc.uiControls.panels.panel;
 
     var wrappanel = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -44,5 +44,5 @@ define(function (require) {
         return this.dom;
     };
     return wrappanel;
-});
+})();
 

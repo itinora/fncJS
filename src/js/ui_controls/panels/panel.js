@@ -1,6 +1,6 @@
-define(function (require) {
-    var uiElement = require('../ui_element');
-    var fncObjectCollection = require('../../core/fnc_object_collection');
+fnc.uiControls.panels.panel = (function () {
+    var uiElement = fnc.uiControls.uiElement;
+    var fncObjectCollection = fnc.core.fncObjectCollection;
 
     var panel = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -22,5 +22,5 @@ define(function (require) {
         }
     }
     return panel;
-});
+})();
 

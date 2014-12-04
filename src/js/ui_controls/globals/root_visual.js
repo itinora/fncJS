@@ -1,6 +1,6 @@
-define(function (require) {
-    var uiElement = require('../ui_element');
-    var factory = require('../../core/factory');
+fnc.uiControls.globals.rootVisual = (function () {
+    var uiElement = fnc.uiControls.uiElement;
+    var factory = fnc.core.factory;
 
     var rootVisual = function (child) {
         if(child) {
@@ -29,5 +29,5 @@ define(function (require) {
         this.dom.appendChild(this.child.render());
     };
     return rootVisual;
-});
+})();
 

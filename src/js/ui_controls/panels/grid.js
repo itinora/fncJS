@@ -1,5 +1,5 @@
-define(function (require) {
-    var panel = require('ui_controls/panels/panel');
+fnc.uiControls.panels.grid = (function () {
+    var panel = fnc.uiControls.panels.panel;
 
     var grid = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -70,11 +70,10 @@ define(function (require) {
         //parse grid specific properties
         parseRowHeights.call(this);
         parseColWidths.call(this);
-        panel.prototype.applyExplicitStyles.call(this);
 
         this.renderChildren();
         return this.dom;
     };
     return grid;
-});
+})();
 

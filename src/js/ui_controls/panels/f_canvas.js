@@ -1,5 +1,5 @@
-define(function (require) {
-    var panel = require('ui_controls/panels/panel');
+fnc.uiControls.panels.fCanvas = (function () {
+    var panel = fnc.uiControls.panels.panel;
 
     var f_canvas = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -17,5 +17,5 @@ define(function (require) {
         return this.dom;
     };
     return f_canvas;
-});
+})();
 

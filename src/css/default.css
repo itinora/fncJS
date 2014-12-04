@@ -1,4 +1,4 @@
-grid, stackpanel, wrappanel, f-canvas {
+grid, stackpanel, wrappanel, f-canvas, dockpanel {
     background: lightgray;
     width: 300px;
     height: 200px;

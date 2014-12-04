@@ -1,4 +1,4 @@
-define([], function () {
+fnc.core.fncObject = (function () {
     var fncObject = function () {
     };
 
@@ -9,4 +9,4 @@ define([], function () {
         }
     }
     return fncObject;
-});
+})();

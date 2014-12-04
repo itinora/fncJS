@@ -1,5 +1,5 @@
-define(function (require) {
-    var uiElement = require('ui_controls/ui_element');
+fnc.uiControls.inputControls.radiobutton = (function () {
+    var uiElement = fnc.uiControls.uiElement;
 
     var radiobutton = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -29,4 +29,4 @@ define(function (require) {
     }
 
     return radiobutton;
-});
+})();

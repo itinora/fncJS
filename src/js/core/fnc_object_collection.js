@@ -1,5 +1,5 @@
-define(function (require) {
-    var fncObject = require('core/fnc_object');
+fnc.core.fncObjectCollection = (function () {
+    var fncObject = fnc.core.fncObject;
 
     var fncObjectCollection = function () {
         this.values = [];
@@ -18,4 +18,4 @@ define(function (require) {
     }
     return fncObjectCollection;
 
-});
+})();

@@ -1,5 +1,5 @@
-define(function (require) {
-    var fncObject = require('../core/fnc_object');
+fnc.uiControls.uiElement = (function(){
+    var fncObject = fnc.core.fncObject;
 
     var uiElement = function (tag, name, value, publicProperties, privateProperties) {
         tag = tag || 'div';
@@ -99,6 +99,35 @@ define(function (require) {
             }else if(key === "f-canvas.top") {
                 var top = parseInt(this.properties[key]);
                 style.top = top + "px";
+            } else if(key === "dockpanel.dock") {
+                var dock = this.properties[key];
+                var dockpanel = this["dockpanel"];
+                if(dock.indexOf('top') > -1) {
+                    style.top = dockpanel.topStart + "px";
+                    dockpanel.topStart = dockpanel.topStart + parseInt(style.height.slice(0, -2));
+                    dockpanel.dom.style.height = dockpanel.topStart + 'px';
+                    var width = parseInt(style.width.slice(0, -2));
+                    if(dock === 'top-left') {
+                        style.left = '0';
+                    } else if(dock === 'top-right') {
+                        style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                    } else {
+                        style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
+                    }
+                }
+                if(dock.indexOf('bottom') > -1) {
+                    style.top = (dockpanel.bottomEnd - parseInt(style.height.slice(0,-2))) + "px";
+                    dockpanel.bottomEnd = dockpanel.bottomEnd - parseInt(style.height.slice(0, -2));
+                    dockpanel.dom.style.height = dockpanel.topStart + 'px';
+                    var width = parseInt(style.width.slice(0, -2));
+                    if(dock === 'top-left') {
+                        style.left = '0';
+                    } else if(dock === 'top-right') {
+                        style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                    } else {
+                        style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
+                    }
+                }
             }
         }
     };
@@ -122,5 +151,5 @@ define(function (require) {
         return this.dom;
     };
     return uiElement;
-});
+})();
 

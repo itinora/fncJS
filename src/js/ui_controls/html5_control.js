@@ -1,5 +1,5 @@
-define(function (require) {
-    var uiElement = require('./ui_element');
+fnc.uiControls.html5Control = (function () {
+    var uiElement = fnc.uiControls.uiElement;
 
     var html5Control = function (tag, name, value, publicProperties, privateProperties) {
         tag = tag || 'div';
@@ -28,5 +28,5 @@ define(function (require) {
         return this.dom;
     };
     return html5Control;
-});
+})();
 

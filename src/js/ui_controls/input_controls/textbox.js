@@ -1,5 +1,5 @@
-define(function (require) {
-    var uiElement = require('ui_controls/ui_element');
+fnc.uiControls.inputControls.textbox = (function () {
+    var uiElement = fnc.uiControls.uiElement;
 
     var textbox = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -31,4 +31,4 @@ define(function (require) {
     }
 
     return textbox;
-});
+})();
