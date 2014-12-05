@@ -2,7 +2,7 @@
 
 # Constants
 SERVICE_URL=http://closure-compiler.appspot.com/compile
-NEWFILE="../dist/fnc-min.js"
+NEWFILE="../dist/fnc.min.js"
 
 # Itearate through all files
 for f in ../dist/fnc.js
