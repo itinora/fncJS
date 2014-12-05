@@ -6,6 +6,7 @@ fnc.uiControls.panels.dockpanel = (function () {
         this.tag = "dockpanel";
         this.topStart = 0;
         this.bottomEnd = 0;
+        this.height = 0;
     }
     dockpanel.prototype = new panel();
     dockpanel.prototype.render = function() {
@@ -15,8 +16,9 @@ fnc.uiControls.panels.dockpanel = (function () {
         //parse dockpanel specific properties
         panel.prototype.applyExplicitStyles.call(this);
 
+        this.height = parseInt(this.dom.style.height.slice(0,-2));
+        this.bottomEnd = this.height;
         this.renderChildren();
-        this.bottomEnd = parseInt(this.dom.style.height.slice(0,-2));
         return this.dom;
     };
     return dockpanel;

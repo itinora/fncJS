@@ -15,6 +15,7 @@ gulp.task('scripts', function() {
       './src/js/ui_controls/panels/grid.js',
       './src/js/ui_controls/panels/stackpanel.js',
       './src/js/ui_controls/panels/wrappanel.js',
+      './src/js/ui_controls/panels/dockpanel.js',
       './src/js/core/factory.js',
       './src/js/ui_controls/globals/root_visual.js',
       './src/js/main.js'])

@@ -105,28 +105,32 @@ fnc.uiControls.uiElement = (function(){
                 if(dock.indexOf('top') > -1) {
                     style.top = dockpanel.topStart + "px";
                     dockpanel.topStart = dockpanel.topStart + parseInt(style.height.slice(0, -2));
-                    dockpanel.dom.style.height = dockpanel.topStart + 'px';
                     var width = parseInt(style.width.slice(0, -2));
                     if(dock === 'top-left') {
                         style.left = '0';
                     } else if(dock === 'top-right') {
                         style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
-                    } else {
+                    } else { //centered
                         style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
                     }
-                }
-                if(dock.indexOf('bottom') > -1) {
+                } else if(dock.indexOf('bottom') > -1) {
                     style.top = (dockpanel.bottomEnd - parseInt(style.height.slice(0,-2))) + "px";
                     dockpanel.bottomEnd = dockpanel.bottomEnd - parseInt(style.height.slice(0, -2));
-                    dockpanel.dom.style.height = dockpanel.topStart + 'px';
                     var width = parseInt(style.width.slice(0, -2));
-                    if(dock === 'top-left') {
+                    if(dock === 'bottom-left') {
                         style.left = '0';
-                    } else if(dock === 'top-right') {
+                    } else if(dock === 'bottom-right') {
                         style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
                     } else {
                         style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
                     }
+                } else if(dock === 'left') {
+                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
+                    style.left = '0';
+                } else if(dock === 'right') {
+                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
+                    var width = parseInt(style.width.slice(0, -2));
+                    style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
                 }
             }
         }
