@@ -20,7 +20,6 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function() {
         uiElement.prototype.render.call(this);
-        this.applyExplicitStyles();
 
         if(this.children) {
             renderChildren.call(this);

@@ -29,8 +29,9 @@ fnc.uiControls.panels.wrappanel = (function () {
             currentLeft = currentLeft + width;
 
         }
-        this.dom.style.width = currentLeft + 'px';
-        this.dom.style.height = (currentTop + maxHeight) + 'px';
+        this.dom.style.width = (currentLeft > this.width ? currentLeft : this.width) + 'px';
+        var newHeight = (currentTop + maxHeight);
+        this.dom.style.height = (newHeight > this.height ? newHeight : this.height) + 'px';
     }
 
     wrappanel.prototype = new panel();
@@ -40,7 +41,6 @@ fnc.uiControls.panels.wrappanel = (function () {
 
         this.renderChildren();
         placeChildrenInsideWrapPanel.call(this);
-        panel.prototype.applyExplicitStyles.call(this);
         return this.dom;
     };
     return wrappanel;

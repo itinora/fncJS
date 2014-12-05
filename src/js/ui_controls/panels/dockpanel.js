@@ -13,8 +13,6 @@ fnc.uiControls.panels.dockpanel = (function () {
         //create this.dom as per parent
         panel.prototype.render.call(this);
 
-        //parse dockpanel specific properties
-        panel.prototype.applyExplicitStyles.call(this);
 
         this.height = parseInt(this.dom.style.height.slice(0,-2));
         this.bottomEnd = this.height;

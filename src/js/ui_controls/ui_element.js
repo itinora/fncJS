@@ -15,21 +15,27 @@ fnc.uiControls.uiElement = (function(){
             return this.properties[property];
         };
 
-        this.applyExplicitStyles = function() {
-            var elem = this.dom;
-            if(this.properties['height']) {
-                elem.style.height = this.properties['height'] + "px";
-            }
-            if(this.properties['width']) {
-                elem.style.width = this.properties['width'] + "px";
-            }
-        };
-
         this.initialize(name, publicProperties, privateProperties);
         this.tag = tag;
         this.value = value || '';
         this.dom = null;
     };
+
+
+    var applyExplicitStyles = function() {
+        var elem = this.dom;
+        var width = this.properties['width'];
+        if(width) {
+            elem.style.width = width + "px";
+            this.width = width;
+        }
+        var height = this.properties['height'];
+        if(height) {
+            elem.style.height = height + "px";
+            this.height = height;
+        }
+    };
+
 
     var setDomNameValueAndProperties = function() {
         if (this.name) {
@@ -151,6 +157,7 @@ fnc.uiControls.uiElement = (function(){
         this.dom = document.createElement(this.tag);
         setDomNameValueAndProperties.call(this);
         applyDefaultUIStyles.call(this);
+        applyExplicitStyles.call(this);
         setPositionAndDimensionRelativeToParent.call(this);
         return this.dom;
     };

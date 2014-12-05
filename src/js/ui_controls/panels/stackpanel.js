@@ -20,8 +20,8 @@ fnc.uiControls.panels.stackpanel = (function () {
                     maxHeight = height;
                 }
             }
-            this.dom.style.width = currentLeft + 'px';
-            this.dom.style.height = maxHeight + 'px';
+            this.dom.style.width = (currentLeft > this.width ? currentLeft : this.width) + 'px';
+            this.dom.style.height = (maxHeight > this.height ? maxHeight : this.height) + 'px';
         } else {
             var currentTop = 0;
             var maxWidth = 0;
@@ -35,8 +35,8 @@ fnc.uiControls.panels.stackpanel = (function () {
                     maxWidth = width;
                 }
             }
-            this.dom.style.height = currentTop + 'px';
-            this.dom.style.width = maxWidth + 'px';
+            this.dom.style.height = (currentTop > this.height ? currentTop : this.height) + 'px';
+            this.dom.style.width = (maxWidth > this.width ? maxWidth : this.width) + 'px';
         }
     }
 
@@ -47,7 +47,6 @@ fnc.uiControls.panels.stackpanel = (function () {
 
         this.renderChildren();
         setChildrenOrientation.call(this);
-        this.applyExplicitStyles();
         return this.dom;
     };
     return stackpanel;

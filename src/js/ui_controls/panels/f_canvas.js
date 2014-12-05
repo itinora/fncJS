@@ -10,9 +10,6 @@ fnc.uiControls.panels.fCanvas = (function () {
         //create this.dom as per parent
         panel.prototype.render.call(this);
 
-        //parse f_canvas specific properties
-        panel.prototype.applyExplicitStyles.call(this);
-
         this.renderChildren();
         return this.dom;
     };

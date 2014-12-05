@@ -11,7 +11,6 @@ fnc.uiControls.inputControls.textbox = (function () {
     textbox.prototype.render = function() {
         //create this.dom as per parent
         uiElement.prototype.render.call(this);
-        this.applyExplicitStyles();
 
         var input = document.createElement('input');
         input.setAttribute('type', 'text');
