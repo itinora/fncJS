@@ -57,21 +57,27 @@ fnc.uiControls.uiElement = (function(){
             return this.properties[property];
         };
 
-        this.applyExplicitStyles = function() {
-            var elem = this.dom;
-            if(this.properties['height']) {
-                elem.style.height = this.properties['height'] + "px";
-            }
-            if(this.properties['width']) {
-                elem.style.width = this.properties['width'] + "px";
-            }
-        };
-
         this.initialize(name, publicProperties, privateProperties);
         this.tag = tag;
         this.value = value || '';
         this.dom = null;
     };
+
+
+    var applyExplicitStyles = function() {
+        var elem = this.dom;
+        var width = this.properties['width'];
+        if(width) {
+            elem.style.width = width + "px";
+            this.width = width;
+        }
+        var height = this.properties['height'];
+        if(height) {
+            elem.style.height = height + "px";
+            this.height = height;
+        }
+    };
+
 
     var setDomNameValueAndProperties = function() {
         if (this.name) {
@@ -151,9 +157,9 @@ fnc.uiControls.uiElement = (function(){
                     if(dock === 'top-left') {
                         style.left = '0';
                     } else if(dock === 'top-right') {
-                        style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                        style.left = (dockpanel.width - width) + 'px';
                     } else { //centered
-                        style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
+                        style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock.indexOf('bottom') > -1) {
                     style.top = (dockpanel.bottomEnd - parseInt(style.height.slice(0,-2))) + "px";
@@ -162,9 +168,9 @@ fnc.uiControls.uiElement = (function(){
                     if(dock === 'bottom-left') {
                         style.left = '0';
                     } else if(dock === 'bottom-right') {
-                        style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                        style.left = (dockpanel.width - width) + 'px';
                     } else {
-                        style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
+                        style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock === 'left') {
                     style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
@@ -172,27 +178,35 @@ fnc.uiControls.uiElement = (function(){
                 } else if(dock === 'right') {
                     style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
                     var width = parseInt(style.width.slice(0, -2));
-                    style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                    style.left = (dockpanel.width - width) + 'px';
                 }
             }
         }
     };
 
-    var applyDefaultUIStyles = function() {
+    var applyDefaultUIStyles = function(options) {
         var elem = this.dom;
-        elem.style.height = "20px";   //default height 20px
-        elem.style.width = "100px";    //default width 100px
+        if(options) {
+            var availableWidth = options['available_width'];
+            var availableHeight = options['available_height'];
+        }
+        this.width = (availableWidth || 100);
+        this.height = (availableHeight || 20);
+        elem.style.width = this.width + 'px';    //default width 100px
+        elem.style.height = this.height + 'px';   //default height 20px
         elem.style.position = "absolute";
         elem.style.textAlign = "center";
         elem.style.boxSizing = "border-box";
+
     };
 
     uiElement.prototype = new fncObject();
 
-    uiElement.prototype.render = function() {
+    uiElement.prototype.render = function(options) {
         this.dom = document.createElement(this.tag);
         setDomNameValueAndProperties.call(this);
-        applyDefaultUIStyles.call(this);
+        applyDefaultUIStyles.call(this, options);
+        applyExplicitStyles.call(this);
         setPositionAndDimensionRelativeToParent.call(this);
         return this.dom;
     };
@@ -222,7 +236,6 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function() {
         uiElement.prototype.render.call(this);
-        this.applyExplicitStyles();
 
         if(this.children) {
             renderChildren.call(this);
@@ -246,7 +259,6 @@ fnc.uiControls.inputControls.radiobutton = (function () {
     radiobutton.prototype.render = function() {
         //create this.dom as per parent
         uiElement.prototype.render.call(this);
-        this.applyExplicitStyles();
 
         var input = document.createElement('input');
         input.setAttribute('type', 'radio');
@@ -279,7 +291,6 @@ fnc.uiControls.inputControls.textbox = (function () {
     textbox.prototype.render = function() {
         //create this.dom as per parent
         uiElement.prototype.render.call(this);
-        this.applyExplicitStyles();
 
         var input = document.createElement('input');
         input.setAttribute('type', 'text');
@@ -312,9 +323,9 @@ fnc.uiControls.panels.panel = (function () {
 
     panel.prototype = new uiElement();
 
-    panel.prototype.render = function() {
+    panel.prototype.render = function(options) {
         //create this.dom as per parent
-        uiElement.prototype.render.call(this);
+        uiElement.prototype.render.call(this, options);
 
         this.dom.style.position = "relative";
     }
@@ -336,12 +347,9 @@ fnc.uiControls.panels.fCanvas = (function () {
         this.tag = "f-canvas";
     }
     f_canvas.prototype = new panel();
-    f_canvas.prototype.render = function() {
+    f_canvas.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
-
-        //parse f_canvas specific properties
-        panel.prototype.applyExplicitStyles.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         return this.dom;
@@ -360,7 +368,7 @@ fnc.uiControls.panels.grid = (function () {
         this.cols = [];
     }
     grid.prototype = new panel();
-    grid.prototype.render = function() {
+    grid.prototype.render = function(options) {
         var parseCompositeProperty = function(propertyInDom, maxPropertyValue, toBeAddedTo, toBeAddedWithPropertyName) {
             var parts = propertyInDom.split(' ');
             var cummulativeValue = 0;
@@ -417,7 +425,7 @@ fnc.uiControls.panels.grid = (function () {
 
 
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         //parse grid specific properties
         parseRowHeights.call(this);
@@ -452,8 +460,8 @@ fnc.uiControls.panels.stackpanel = (function () {
                     maxHeight = height;
                 }
             }
-            this.dom.style.width = currentLeft + 'px';
-            this.dom.style.height = maxHeight + 'px';
+            this.dom.style.width = (currentLeft > this.width ? currentLeft : this.width) + 'px';
+            this.dom.style.height = (maxHeight > this.height ? maxHeight : this.height) + 'px';
         } else {
             var currentTop = 0;
             var maxWidth = 0;
@@ -467,19 +475,18 @@ fnc.uiControls.panels.stackpanel = (function () {
                     maxWidth = width;
                 }
             }
-            this.dom.style.height = currentTop + 'px';
-            this.dom.style.width = maxWidth + 'px';
+            this.dom.style.height = (currentTop > this.height ? currentTop : this.height) + 'px';
+            this.dom.style.width = (maxWidth > this.width ? maxWidth : this.width) + 'px';
         }
     }
 
     stackpanel.prototype = new panel();
-    stackpanel.prototype.render = function() {
+    stackpanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         setChildrenOrientation.call(this);
-        this.applyExplicitStyles();
         return this.dom;
     };
     return stackpanel;
@@ -517,18 +524,18 @@ fnc.uiControls.panels.wrappanel = (function () {
             currentLeft = currentLeft + width;
 
         }
-        this.dom.style.width = currentLeft + 'px';
-        this.dom.style.height = (currentTop + maxHeight) + 'px';
+        this.dom.style.width = (currentLeft > this.width ? currentLeft : this.width) + 'px';
+        var newHeight = (currentTop + maxHeight);
+        this.dom.style.height = (newHeight > this.height ? newHeight : this.height) + 'px';
     }
 
     wrappanel.prototype = new panel();
-    wrappanel.prototype.render = function() {
+    wrappanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         placeChildrenInsideWrapPanel.call(this);
-        panel.prototype.applyExplicitStyles.call(this);
         return this.dom;
     };
     return wrappanel;
@@ -546,12 +553,9 @@ fnc.uiControls.panels.dockpanel = (function () {
         this.height = 0;
     }
     dockpanel.prototype = new panel();
-    dockpanel.prototype.render = function() {
+    dockpanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
-
-        //parse dockpanel specific properties
-        panel.prototype.applyExplicitStyles.call(this);
+        panel.prototype.render.call(this, options);
 
         this.height = parseInt(this.dom.style.height.slice(0,-2));
         this.bottomEnd = this.height;
@@ -657,7 +661,7 @@ fnc.uiControls.globals.rootVisual = (function () {
         if(child) {
             this.dom.removeChild(child);
         }
-        this.dom.appendChild(this.child.render());
+        this.dom.appendChild(this.child.render({available_width: window.innerWidth, available_height: window.innerHeight}));
     };
     return rootVisual;
 })();

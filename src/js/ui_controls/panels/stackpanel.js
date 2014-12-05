@@ -41,9 +41,9 @@ fnc.uiControls.panels.stackpanel = (function () {
     }
 
     stackpanel.prototype = new panel();
-    stackpanel.prototype.render = function() {
+    stackpanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         setChildrenOrientation.call(this);

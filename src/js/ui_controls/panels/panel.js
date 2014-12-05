@@ -9,9 +9,9 @@ fnc.uiControls.panels.panel = (function () {
 
     panel.prototype = new uiElement();
 
-    panel.prototype.render = function() {
+    panel.prototype.render = function(options) {
         //create this.dom as per parent
-        uiElement.prototype.render.call(this);
+        uiElement.prototype.render.call(this, options);
 
         this.dom.style.position = "relative";
     }

@@ -26,7 +26,7 @@ fnc.uiControls.globals.rootVisual = (function () {
         if(child) {
             this.dom.removeChild(child);
         }
-        this.dom.appendChild(this.child.render());
+        this.dom.appendChild(this.child.render({available_width: window.innerWidth, available_height: window.innerHeight}));
     };
     return rootVisual;
 })();

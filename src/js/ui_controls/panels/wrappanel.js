@@ -35,9 +35,9 @@ fnc.uiControls.panels.wrappanel = (function () {
     }
 
     wrappanel.prototype = new panel();
-    wrappanel.prototype.render = function() {
+    wrappanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         placeChildrenInsideWrapPanel.call(this);

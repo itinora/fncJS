@@ -115,9 +115,9 @@ fnc.uiControls.uiElement = (function(){
                     if(dock === 'top-left') {
                         style.left = '0';
                     } else if(dock === 'top-right') {
-                        style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                        style.left = (dockpanel.width - width) + 'px';
                     } else { //centered
-                        style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
+                        style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock.indexOf('bottom') > -1) {
                     style.top = (dockpanel.bottomEnd - parseInt(style.height.slice(0,-2))) + "px";
@@ -126,9 +126,9 @@ fnc.uiControls.uiElement = (function(){
                     if(dock === 'bottom-left') {
                         style.left = '0';
                     } else if(dock === 'bottom-right') {
-                        style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                        style.left = (dockpanel.width - width) + 'px';
                     } else {
-                        style.left = (parseInt(dockpanel.properties['width']) - width) / 2 + 'px';
+                        style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock === 'left') {
                     style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
@@ -136,27 +136,34 @@ fnc.uiControls.uiElement = (function(){
                 } else if(dock === 'right') {
                     style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
                     var width = parseInt(style.width.slice(0, -2));
-                    style.left = (parseInt(dockpanel.properties['width']) - width) + 'px';
+                    style.left = (dockpanel.width - width) + 'px';
                 }
             }
         }
     };
 
-    var applyDefaultUIStyles = function() {
+    var applyDefaultUIStyles = function(options) {
         var elem = this.dom;
-        elem.style.height = "20px";   //default height 20px
-        elem.style.width = "100px";    //default width 100px
+        if(options) {
+            var availableWidth = options['available_width'];
+            var availableHeight = options['available_height'];
+        }
+        this.width = (availableWidth || 100);
+        this.height = (availableHeight || 20);
+        elem.style.width = this.width + 'px';    //default width 100px
+        elem.style.height = this.height + 'px';   //default height 20px
         elem.style.position = "absolute";
         elem.style.textAlign = "center";
         elem.style.boxSizing = "border-box";
+
     };
 
     uiElement.prototype = new fncObject();
 
-    uiElement.prototype.render = function() {
+    uiElement.prototype.render = function(options) {
         this.dom = document.createElement(this.tag);
         setDomNameValueAndProperties.call(this);
-        applyDefaultUIStyles.call(this);
+        applyDefaultUIStyles.call(this, options);
         applyExplicitStyles.call(this);
         setPositionAndDimensionRelativeToParent.call(this);
         return this.dom;

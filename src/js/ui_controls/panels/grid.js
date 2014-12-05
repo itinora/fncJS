@@ -8,7 +8,7 @@ fnc.uiControls.panels.grid = (function () {
         this.cols = [];
     }
     grid.prototype = new panel();
-    grid.prototype.render = function() {
+    grid.prototype.render = function(options) {
         var parseCompositeProperty = function(propertyInDom, maxPropertyValue, toBeAddedTo, toBeAddedWithPropertyName) {
             var parts = propertyInDom.split(' ');
             var cummulativeValue = 0;
@@ -65,7 +65,7 @@ fnc.uiControls.panels.grid = (function () {
 
 
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         //parse grid specific properties
         parseRowHeights.call(this);

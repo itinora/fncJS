@@ -6,9 +6,9 @@ fnc.uiControls.panels.fCanvas = (function () {
         this.tag = "f-canvas";
     }
     f_canvas.prototype = new panel();
-    f_canvas.prototype.render = function() {
+    f_canvas.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         return this.dom;

@@ -9,10 +9,9 @@ fnc.uiControls.panels.dockpanel = (function () {
         this.height = 0;
     }
     dockpanel.prototype = new panel();
-    dockpanel.prototype.render = function() {
+    dockpanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
-
+        panel.prototype.render.call(this, options);
 
         this.height = parseInt(this.dom.style.height.slice(0,-2));
         this.bottomEnd = this.height;
