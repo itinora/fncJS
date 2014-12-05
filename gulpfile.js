@@ -29,7 +29,7 @@ gulp.task('concat', function() {
 gulp.task('minify', function () {
     gulp.src(sourceFiles)
     .pipe(concat('fnc.min.js'))
-    .pipe(uglify())
+    .pipe(uglify({mangle:true}))
     .pipe(gulp.dest('./dist/'))
 });
 
