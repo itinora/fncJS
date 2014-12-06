@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../../../src/css/default.css" >
+    </head>
+    <body>
+        <dockpanel id="layoutRoot" >
+            <div dockpanel.dock="top" height="40">Header (width not specified, height=40)</div>
+            <div dockpanel.dock="bottom" height="20">Footer (width not specified, height=20)</div>
+            <div dockpanel.dock="top-right" width="400" >
+                Sidebar (width=400, height not specified).
+
+                    The ordering of the controls inside a dockpanel is important. In this example the Header is put first, then the Footer and then this Sidebar.
+                    Because of this arrangement, the Sidebar takes the remaining available height after Header and Footer.
+                    If the Sidebar is added immediately after Header, it will take the full available height after the Header till the bottom of the page and the Footer will overlap
+                    on top of it.
+
+            </div>
+        </dockpanel>
+        <script src="../../../dist/fnc.min.js" ></script>
+    </body>
+</html>

@@ -18,8 +18,8 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype = new uiElement();
 
-    html5Control.prototype.render = function() {
-        uiElement.prototype.render.call(this);
+    html5Control.prototype.render = function(options) {
+        uiElement.prototype.render.call(this, options);
 
         if(this.children) {
             renderChildren.call(this);

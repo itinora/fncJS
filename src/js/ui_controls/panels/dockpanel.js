@@ -15,7 +15,7 @@ fnc.uiControls.panels.dockpanel = (function () {
 
         this.height = parseInt(this.dom.style.height.slice(0,-2));
         this.bottomEnd = this.height;
-        this.renderChildren();
+        this.renderChildren({available_width: this.width, available_height: this.bottomEnd - this.topStart});
         return this.dom;
     };
     return dockpanel;

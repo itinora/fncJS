@@ -106,8 +106,11 @@ fnc.uiControls.uiElement = (function(){
                 var top = parseInt(this.properties[key]);
                 style.top = top + "px";
             } else if(key === "dockpanel.dock") {
-                var dock = this.properties[key];
                 var dockpanel = this["dockpanel"];
+                if(!this.properties['height']) {
+                    style.height = dockpanel.bottomEnd - dockpanel.topStart + 'px';
+                }
+                var dock = this.properties[key];
                 if(dock.indexOf('top') > -1) {
                     style.top = dockpanel.topStart + "px";
                     dockpanel.topStart = dockpanel.topStart + parseInt(style.height.slice(0, -2));
@@ -131,10 +134,10 @@ fnc.uiControls.uiElement = (function(){
                         style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock === 'left') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
+                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
                     style.left = '0';
                 } else if(dock === 'right') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
+                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
                     var width = parseInt(style.width.slice(0, -2));
                     style.left = (dockpanel.width - width) + 'px';
                 }

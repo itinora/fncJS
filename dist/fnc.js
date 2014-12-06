@@ -148,8 +148,11 @@ fnc.uiControls.uiElement = (function(){
                 var top = parseInt(this.properties[key]);
                 style.top = top + "px";
             } else if(key === "dockpanel.dock") {
-                var dock = this.properties[key];
                 var dockpanel = this["dockpanel"];
+                if(!this.properties['height']) {
+                    style.height = dockpanel.bottomEnd - dockpanel.topStart + 'px';
+                }
+                var dock = this.properties[key];
                 if(dock.indexOf('top') > -1) {
                     style.top = dockpanel.topStart + "px";
                     dockpanel.topStart = dockpanel.topStart + parseInt(style.height.slice(0, -2));
@@ -173,10 +176,10 @@ fnc.uiControls.uiElement = (function(){
                         style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock === 'left') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
+                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
                     style.left = '0';
                 } else if(dock === 'right') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + "px";
+                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
                     var width = parseInt(style.width.slice(0, -2));
                     style.left = (dockpanel.width - width) + 'px';
                 }
@@ -234,8 +237,8 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype = new uiElement();
 
-    html5Control.prototype.render = function() {
-        uiElement.prototype.render.call(this);
+    html5Control.prototype.render = function(options) {
+        uiElement.prototype.render.call(this, options);
 
         if(this.children) {
             renderChildren.call(this);
@@ -330,9 +333,9 @@ fnc.uiControls.panels.panel = (function () {
         this.dom.style.position = "relative";
     }
 
-    panel.prototype.renderChildren = function() {
+    panel.prototype.renderChildren = function(options) {
         for(var i= 0, child; child = this.children.get(i); i++) {
-            this.dom.appendChild(child.render());
+            this.dom.appendChild(child.render(options));
         }
     }
     return panel;
@@ -559,7 +562,7 @@ fnc.uiControls.panels.dockpanel = (function () {
 
         this.height = parseInt(this.dom.style.height.slice(0,-2));
         this.bottomEnd = this.height;
-        this.renderChildren();
+        this.renderChildren({available_width: this.width, available_height: this.bottomEnd - this.topStart});
         return this.dom;
     };
     return dockpanel;

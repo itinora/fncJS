@@ -16,9 +16,9 @@ fnc.uiControls.panels.panel = (function () {
         this.dom.style.position = "relative";
     }
 
-    panel.prototype.renderChildren = function() {
+    panel.prototype.renderChildren = function(options) {
         for(var i= 0, child; child = this.children.get(i); i++) {
-            this.dom.appendChild(child.render());
+            this.dom.appendChild(child.render(options));
         }
     }
     return panel;
