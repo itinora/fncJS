@@ -3,6 +3,11 @@ html, body, div {
     padding: 0;
 }
 
+body {
+    transform-origin: 0 0;
+    overflow: hidden;
+}
+
 grid, stackpanel, wrappanel, f-canvas, dockpanel {
     background: lightgray;
     width: 300px;

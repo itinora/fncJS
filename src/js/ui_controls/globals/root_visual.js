@@ -7,6 +7,16 @@ fnc.uiControls.globals.rootVisual = (function () {
             this.child = child;
         }
         this.dom = document.getElementsByTagName('body')[0];
+        var attributes = this.dom.attributes;
+        for (var i = 0, attr; attr = attributes[i]; i++){
+            this.properties[attr.name] = attr.value;
+            if(attr.name === 'standard-width') {
+                this.standardWidth = parseInt(attr.value);
+            }
+            if(attr.name === 'standard-height') {
+                this.standardHeight = parseInt(attr.value);
+            }
+        }
 
         this.refreshVisualTree = function(){
             for(var i=0, child; child=this.dom.children[i]; i++) {
@@ -26,8 +36,21 @@ fnc.uiControls.globals.rootVisual = (function () {
         if(child) {
             this.dom.removeChild(child);
         }
-        this.dom.appendChild(this.child.render({available_width: window.innerWidth, available_height: window.innerHeight}));
+        var availableWidth = this.standardWidth > window.innerWidth ? this.standardWidth : window.innerWidth;
+        var availableHeight = this.standardHeight > window.innerHeight ? this.standardHeight : window.innerHeight;
+        this.dom.appendChild(this.child.render({available_width: availableWidth, available_height: availableHeight}));
+        this.scaleAsPerStandardDimensions();
     };
+    rootVisual.prototype.scaleAsPerStandardDimensions = function() {
+        var scaleX = window.innerWidth / this.standardWidth;
+        if(scaleX < 1) {
+            this.dom.style.transform = this.dom.style.transform + " scaleX(" + scaleX + ")";
+        }
+        var scaleY = window.innerHeight / this.standardHeight;
+        if(scaleY < 1) {
+            this.dom.style.transform = this.dom.style.transform + " scaleY(" + scaleY + ")";
+        }
+    }
     return rootVisual;
 })();
 
