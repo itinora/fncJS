@@ -66,12 +66,12 @@ fnc.uiControls.uiElement = (function(){
 
     var applyExplicitStyles = function() {
         var elem = this.dom;
-        var width = this.properties['width'];
+        var width = parseInt(this.properties['width']);
         if(width) {
             elem.style.width = width + "px";
             this.width = width;
         }
-        var height = this.properties['height'];
+        var height = parseInt(this.properties['height']);
         if(height) {
             elem.style.height = height + "px";
             this.height = height;
@@ -387,14 +387,19 @@ fnc.uiControls.panels.grid = (function () {
                     }
                 } else if (part === '*') {  //add the remaining value to this part
                     var prop = {};
-                    prop[toBeAddedWithPropertyName] =  maxPropertyValue - cummulativeValue;
+                    prop[toBeAddedWithPropertyName] =  '*';
                     toBeAddedTo.push(prop);
-                    cummulativeValue = maxPropertyValue;
                 } else {    //number in pixel
                     cummulativeValue = cummulativeValue + partNumeric;
                     var prop = {};
                     prop[toBeAddedWithPropertyName] = partNumeric;
                     toBeAddedTo.push(prop);
+                }
+            }
+            for(var i= 0, prop; prop = toBeAddedTo[i]; i++) {
+                if(prop[toBeAddedWithPropertyName] === '*') {
+                    prop[toBeAddedWithPropertyName] = maxPropertyValue - cummulativeValue;
+                    cummulativeValue = maxPropertyValue;
                 }
             }
             if (cummulativeValue > 0) {
@@ -404,7 +409,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseRowHeights = function() {
             if(this.properties['rowheights']) {
-                parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.properties['height']), this.rows, 'height');
+                parseCompositeProperty.call(this, this.properties['rowheights'], this.height, this.rows, 'height');
                 var rows = this["rows"];
                 var currentTop = 0;
                 for (var i = 0, row; row = rows[i]; i++) {
@@ -416,7 +421,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseColWidths = function() {
             if(this.properties['colwidths']) {
-                parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.properties['width']), this.cols, 'width');
+                parseCompositeProperty.call(this, this.properties['colwidths'], this.width, this.cols, 'width');
                 var cols = this["cols"];
                 var currentLeft = 0;
                 for (var i = 0, col; col = cols[i]; i++) {

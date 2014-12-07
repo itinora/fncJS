@@ -24,12 +24,12 @@ fnc.uiControls.uiElement = (function(){
 
     var applyExplicitStyles = function() {
         var elem = this.dom;
-        var width = this.properties['width'];
+        var width = parseInt(this.properties['width']);
         if(width) {
             elem.style.width = width + "px";
             this.width = width;
         }
-        var height = this.properties['height'];
+        var height = parseInt(this.properties['height']);
         if(height) {
             elem.style.height = height + "px";
             this.height = height;
