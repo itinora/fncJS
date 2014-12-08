@@ -44,7 +44,7 @@ fnc.uiControls.uiElement = (function(){
         if(this.children === undefined) {
             if (this.tag === 'input') {
                 this.dom.setAttribute('value', this.dom.getAttribute('value'));
-            } else {
+            } else if(this.tag === 'div' || this.tag === 'label' || this.tag === 'dockpanel' || this.tag === 'f_canvas' || this.tag === 'grid' || this.tag === 'stackpanel' || this.tag === 'wrappanel' || this.tag === 'span') {
                 this.dom.innerText = this.value;
             }
         }
