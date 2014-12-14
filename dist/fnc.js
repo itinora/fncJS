@@ -3,6 +3,7 @@ fnc.core = {};
 fnc.uiControls = {};
 fnc.uiControls.globals = {};
 fnc.uiControls.inputControls = {};
+fnc.uiControls.orchestrators = {};
 fnc.uiControls.panels = {};
 
 fnc.core.fncObject = (function () {
@@ -86,7 +87,7 @@ fnc.uiControls.uiElement = (function(){
         if(this.children === undefined) {
             if (this.tag === 'input') {
                 this.dom.setAttribute('value', this.dom.getAttribute('value'));
-            } else {
+            } else if(this.tag === 'div' || this.tag === 'label' || this.tag === 'li' || this.tag === 'dockpanel' || this.tag === 'f_canvas' || this.tag === 'grid' || this.tag === 'stackpanel' || this.tag === 'wrappanel' || this.tag === 'span') {
                 this.dom.innerText = this.value;
             }
         }
@@ -193,14 +194,18 @@ fnc.uiControls.uiElement = (function(){
             var availableWidth = options['available_width'];
             var availableHeight = options['available_height'];
         }
-        this.width = (availableWidth || 100);
-        this.height = (availableHeight || 20);
-        elem.style.width = this.width + 'px';    //default width 100px
-        elem.style.height = this.height + 'px';   //default height 20px
+        this.width = (availableWidth || 100);       //default width 100px
+        this.height = (availableHeight || 20);      //default height 20px
+        elem.style.width = this.width + 'px';
+        elem.style.height = this.height + 'px';
         elem.style.position = "absolute";
-        elem.style.textAlign = "center";
-        elem.style.boxSizing = "border-box";
 
+        if (this.tag === 'div' || this.tag === 'span' || this.tag === 'ul' || this.tag === 'ol' || this.tag === 'li') {
+            elem.style.textAlign = "left";
+        } else {
+            elem.style.textAlign = "center";
+        }
+        elem.style.boxSizing = "border-box";
     };
 
     uiElement.prototype = new fncObject();
@@ -231,7 +236,12 @@ fnc.uiControls.html5Control = (function () {
 
     var renderChildren = function() {
         for(var i= 0, child; child = this.children.get(i); i++) {
-            this.dom.appendChild(child.render());
+            var childDOM = child.render();
+            childDOM.style.position = "static";
+            childDOM.style.width = null;
+            childDOM.style.height = null;
+
+            this.dom.appendChild(childDOM);
         }
     };
 
@@ -239,8 +249,8 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function(options) {
         uiElement.prototype.render.call(this, options);
-
         if(this.children) {
+            this.dom.innerText = this.value;    //any text put directly under div before the child elements
             renderChildren.call(this);
         }
         return this.dom;
@@ -320,12 +330,13 @@ fnc.uiControls.panels.panel = (function () {
     var fncObjectCollection = fnc.core.fncObjectCollection;
 
     var panel = function (name, publicProperties, privateProperties) {
-        this.initialize(name, publicProperties, privateProperties);
-        this.children = new fncObjectCollection();
+        this.initialize = function(name, publicProperties, privateProperties) {
+            panel.prototype.initialize.call(this, name, publicProperties, privateProperties);
+            this.children = new fncObjectCollection();
+        };
     }
 
     panel.prototype = new uiElement();
-
     panel.prototype.render = function(options) {
         //create this.dom as per parent
         uiElement.prototype.render.call(this, options);
@@ -348,7 +359,7 @@ fnc.uiControls.panels.fCanvas = (function () {
     var f_canvas = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
         this.tag = "f-canvas";
-    }
+    };
     f_canvas.prototype = new panel();
     f_canvas.prototype.render = function(options) {
         //create this.dom as per parent
@@ -559,7 +570,7 @@ fnc.uiControls.panels.dockpanel = (function () {
         this.topStart = 0;
         this.bottomEnd = 0;
         this.height = 0;
-    }
+    };
     dockpanel.prototype = new panel();
     dockpanel.prototype.render = function(options) {
         //create this.dom as per parent
@@ -574,10 +585,61 @@ fnc.uiControls.panels.dockpanel = (function () {
 })();
 
 
+fnc.uiControls.orchestrators.loadingStage = (function () {
+    var panel = fnc.uiControls.panels.panel;
+
+    var loadingStage = function (dom, publicProperties, privateProperties) {
+        this.initialize(publicProperties['id'], publicProperties, privateProperties);
+        this.tag = "loading-stage";
+    };
+    loadingStage.prototype = new panel();
+    loadingStage.prototype.render = function(options) {
+        this.dom = document.createElement(this.tag);
+        for(var i= 0, child; child = this.children.get(i); i++) {
+            if(child.tag === 'javascript') {
+
+            } else {
+                var childDOM = child.render();
+                childDOM.style.position = "static";
+                childDOM.style.width = null;
+                childDOM.style.height = null;
+                this.dom.appendChild(childDOM);
+            }
+        }
+        return this.dom;
+    };
+    return loadingStage;
+})();
+
+
+fnc.uiControls.orchestrators.loader = (function () {
+    var uiElement = fnc.uiControls.uiElement;
+    var fncObjectCollection = fnc.core.fncObjectCollection;
+
+    var loader = function (dom, publicProperties, privateProperties) {
+        this.initialize(publicProperties['id'], publicProperties, privateProperties);
+        this.tag = "loader";
+        this.loadingStages = new fncObjectCollection();
+
+    };
+    loader.prototype = new uiElement();
+    loader.prototype.render = function(options) {
+        this.dom = document.createElement(this.tag);
+        for(var i= 0, stage; stage = this.loadingStages.get(i); i++) {
+            this.dom.appendChild(stage.render());
+        }
+        return this.dom;
+    };
+    return loader;
+})();
+
+
 fnc.core.factory = (function () {
     var fncObjectCollection = fnc.core.fncObjectCollection;
     var uiElement = fnc.uiControls.uiElement;
     var html5Control = fnc.uiControls.html5Control;
+    var loader = fnc.uiControls.orchestrators.loader;
+    var loadingStage = fnc.uiControls.orchestrators.loadingStage;
     var grid = fnc.uiControls.panels.grid;
     var stackpanel = fnc.uiControls.panels.stackpanel;
     var wrappanel = fnc.uiControls.panels.wrappanel;
@@ -596,7 +658,17 @@ fnc.core.factory = (function () {
             }
 
             var controlObject = new uiElement();
-            if (dom.tagName === 'GRID') {
+            if (dom.tagName === 'LOADER') {
+                controlObject = new loader(dom, publicProperties, privateProperties);
+                for (var i = 0, child; child = dom.children[i]; i++) {
+                    controlObject.loadingStages.push(this.createUiControl(child, {}, {}));
+                }
+            } else if (dom.tagName === 'LOADING-STAGE') {
+                controlObject = new loadingStage(dom, publicProperties, privateProperties);
+                for(var i= 0, child; child = dom.children[i]; i++) {
+                    controlObject.children.push(this.createUiControl(child, {}, {}));
+                }
+            } else if (dom.tagName === 'GRID') {
                 controlObject = new grid(publicProperties['id'], publicProperties, privateProperties);
                 for(var i= 0, child; child = dom.children[i]; i++) {
                     controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
@@ -626,7 +698,11 @@ fnc.core.factory = (function () {
             } else if (dom.tagName === 'RADIOBUTTON') {
                 controlObject = new radiobutton(publicProperties['id'], publicProperties, privateProperties);
             } else { //use the tag as given
-                controlObject = new html5Control(dom.tagName.toLowerCase(), publicProperties['id'], dom.innerText, publicProperties, privateProperties);
+                var value = dom.innerText;
+                if (dom.firstChild && dom.firstChild.nodeType == 3) {
+                    value = dom.firstChild.data;
+                }
+                controlObject = new html5Control(dom.tagName.toLowerCase(), publicProperties['id'], value, publicProperties, privateProperties);
                 if(dom.children.length > 0) {
                     controlObject.children = new fncObjectCollection();
                     for(var i= 0, child; child = dom.children[i]; i++) {
@@ -649,15 +725,12 @@ fnc.uiControls.globals.rootVisual = (function () {
         if(child) {
             this.child = child;
         }
-        this.dom = document.getElementsByTagName('body')[0];
+        this.dom = document.body;
         var attributes = this.dom.attributes;
-        for (var i = 0, attr; attr = attributes[i]; i++){
+        for (var i = 0, attr; attr = attributes[i]; i++) {
             this.properties[attr.name] = attr.value;
             if(attr.name === 'standard-width') {
                 this.standardWidth = parseInt(attr.value);
-            }
-            if(attr.name === 'standard-height') {
-                this.standardHeight = parseInt(attr.value);
             }
         }
 
@@ -675,23 +748,23 @@ fnc.uiControls.globals.rootVisual = (function () {
     }
     rootVisual.prototype = new uiElement();
     rootVisual.prototype.render = function() {
+        var topLevelContainer = this.child.render({available_width: availableWidth, available_height: availableHeight});
+        var availableWidth = this.standardWidth > window.innerWidth ? this.standardWidth : window.innerWidth;
+        var availableHeight = this.standardWidth * window.innerHeight / window.innerWidth;
+        this.dom.style.width = availableWidth + 'px';
+        this.dom.style.height = availableHeight + 'px';
+
         var child = this.dom.getElementsByTagName(this.child.tag)[0];
         if(child) {
             this.dom.removeChild(child);
         }
-        var availableWidth = this.standardWidth > window.innerWidth ? this.standardWidth : window.innerWidth;
-        var availableHeight = this.standardHeight > window.innerHeight ? this.standardHeight : window.innerHeight;
-        this.dom.appendChild(this.child.render({available_width: availableWidth, available_height: availableHeight}));
+        this.dom.appendChild(topLevelContainer);
         this.scaleAsPerStandardDimensions();
     };
     rootVisual.prototype.scaleAsPerStandardDimensions = function() {
-        var scaleX = window.innerWidth / this.standardWidth;
-        if(scaleX < 1) {
-            this.dom.style.transform = this.dom.style.transform + " scaleX(" + scaleX + ")";
-        }
-        var scaleY = window.innerHeight / this.standardHeight;
-        if(scaleY < 1) {
-            this.dom.style.transform = this.dom.style.transform + " scaleY(" + scaleY + ")";
+        var scale = window.innerWidth / this.standardWidth;
+        if(scale < 1) {
+            this.dom.style.transform = this.dom.style.transform + " scaleX(" + scale + ") scaleY(" + scale + ")";
         }
     }
     return rootVisual;

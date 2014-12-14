@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var watch = require('gulp-watch');
 
 var sourceFiles = [
     './src/js/namespaces.js',
@@ -16,6 +17,8 @@ var sourceFiles = [
     './src/js/ui_controls/panels/stackpanel.js',
     './src/js/ui_controls/panels/wrappanel.js',
     './src/js/ui_controls/panels/dockpanel.js',
+    './src/js/ui_controls/orchestrators/loadingStage.js',
+    './src/js/ui_controls/orchestrators/loader.js',
     './src/js/core/factory.js',
     './src/js/ui_controls/globals/root_visual.js',
     './src/js/main.js'];
@@ -33,4 +36,8 @@ gulp.task('minify', function () {
     .pipe(gulp.dest('./dist/'))
 });
 
-gulp.task('default', ['concat','minify']);
+gulp.task('watch', function () {
+    gulp.watch(sourceFiles, ['concat','minify']);
+});
+
+gulp.task('default', ['concat','minify', 'watch']);

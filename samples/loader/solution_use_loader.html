@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+    </head>
+    <body >
+        <loader>
+            <loading-stage>
+                <div>
+                    What a loader does:
+                    <ul>
+                        <li>Downloads all scripts asynchronously</li>
+                        <li>Executes scripts in order</li>
+                        <li>Does not block DOM rendering while other scripts are downloaded and executed</li>
+                    </ul>
+                </div>
+            </loading-stage>
+            <loading-stage>
+                <div>Start of script 1 download</div>
+                <javascript src="./script1.js" ></javascript>
+                <div>End of script 1 download</div>
+            </loading-stage>
+            <loading-stage>
+                <div>Start of script 2 download</div>
+                <javascript src="./script2.js" ></javascript>
+                <div>End of script 2 download</div>
+                <div>Start of script 3 download</div>
+                <javascript src="./script3.js" ></javascript>
+                <div>End of script 3 download</div>
+            </loading-stage>
+            <loading-stage>
+                <div>Start of script 4 download</div>
+                <javascript src="./script4.js" ></javascript>
+                <div>End of script 4 download</div>
+            </loading-stage>
+        </loader>
+        <script src="../../dist/fnc.js" ></script>
+    </body>
+</html>

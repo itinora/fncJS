@@ -12,7 +12,12 @@ fnc.uiControls.html5Control = (function () {
 
     var renderChildren = function() {
         for(var i= 0, child; child = this.children.get(i); i++) {
-            this.dom.appendChild(child.render());
+            var childDOM = child.render();
+            childDOM.style.position = "static";
+            childDOM.style.width = null;
+            childDOM.style.height = null;
+
+            this.dom.appendChild(childDOM);
         }
     };
 
@@ -20,8 +25,8 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function(options) {
         uiElement.prototype.render.call(this, options);
-
         if(this.children) {
+            this.dom.innerText = this.value;    //any text put directly under div before the child elements
             renderChildren.call(this);
         }
         return this.dom;

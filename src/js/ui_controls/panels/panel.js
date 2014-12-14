@@ -3,12 +3,13 @@ fnc.uiControls.panels.panel = (function () {
     var fncObjectCollection = fnc.core.fncObjectCollection;
 
     var panel = function (name, publicProperties, privateProperties) {
-        this.initialize(name, publicProperties, privateProperties);
-        this.children = new fncObjectCollection();
+        this.initialize = function(name, publicProperties, privateProperties) {
+            panel.prototype.initialize.call(this, name, publicProperties, privateProperties);
+            this.children = new fncObjectCollection();
+        };
     }
 
     panel.prototype = new uiElement();
-
     panel.prototype.render = function(options) {
         //create this.dom as per parent
         uiElement.prototype.render.call(this, options);

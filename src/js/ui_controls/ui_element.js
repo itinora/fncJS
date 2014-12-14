@@ -44,7 +44,7 @@ fnc.uiControls.uiElement = (function(){
         if(this.children === undefined) {
             if (this.tag === 'input') {
                 this.dom.setAttribute('value', this.dom.getAttribute('value'));
-            } else if(this.tag === 'div' || this.tag === 'label' || this.tag === 'dockpanel' || this.tag === 'f_canvas' || this.tag === 'grid' || this.tag === 'stackpanel' || this.tag === 'wrappanel' || this.tag === 'span') {
+            } else if(this.tag === 'div' || this.tag === 'label' || this.tag === 'li' || this.tag === 'dockpanel' || this.tag === 'f_canvas' || this.tag === 'grid' || this.tag === 'stackpanel' || this.tag === 'wrappanel' || this.tag === 'span') {
                 this.dom.innerText = this.value;
             }
         }
@@ -151,14 +151,18 @@ fnc.uiControls.uiElement = (function(){
             var availableWidth = options['available_width'];
             var availableHeight = options['available_height'];
         }
-        this.width = (availableWidth || 100);
-        this.height = (availableHeight || 20);
-        elem.style.width = this.width + 'px';    //default width 100px
-        elem.style.height = this.height + 'px';   //default height 20px
+        this.width = (availableWidth || 100);       //default width 100px
+        this.height = (availableHeight || 20);      //default height 20px
+        elem.style.width = this.width + 'px';
+        elem.style.height = this.height + 'px';
         elem.style.position = "absolute";
-        elem.style.textAlign = "center";
-        elem.style.boxSizing = "border-box";
 
+        if (this.tag === 'div' || this.tag === 'span' || this.tag === 'ul' || this.tag === 'ol' || this.tag === 'li') {
+            elem.style.textAlign = "left";
+        } else {
+            elem.style.textAlign = "center";
+        }
+        elem.style.boxSizing = "border-box";
     };
 
     uiElement.prototype = new fncObject();

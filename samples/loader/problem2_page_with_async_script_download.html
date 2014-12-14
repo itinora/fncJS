@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+</head>
+    <body >
+        <div>
+            Using async keyword in script tag the JavaScript file downloads are simultaneously.
+            <p>But observe that the DOM update triggered by the scripts happen only after all scripts run has completed. All DOM update messages from all scripts appear at once and not one after the other.
+            Also there is no control over the order of execution of scripts
+        </div>
+        <div>Start of script 1 download</div>
+        <script src="./script1.js" async></script>
+        <div>End of script 1 download</div>
+        <div>Start of script 2 download</div>
+        <script src="./script2.js" async></script>
+        <div>End of script 2 download</div>
+        <div>Start of script 3 download</div>
+        <script src="./script3.js" async></script>
+        <div>End of script 3 download</div>
+        <div>Start of script 4 download</div>
+        <script src="./script4.js" async></script>
+        <div>End of script 4 download</div>
+    </body>
+</html>

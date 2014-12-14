@@ -2,6 +2,8 @@ fnc.core.factory = (function () {
     var fncObjectCollection = fnc.core.fncObjectCollection;
     var uiElement = fnc.uiControls.uiElement;
     var html5Control = fnc.uiControls.html5Control;
+    var loader = fnc.uiControls.orchestrators.loader;
+    var loadingStage = fnc.uiControls.orchestrators.loadingStage;
     var grid = fnc.uiControls.panels.grid;
     var stackpanel = fnc.uiControls.panels.stackpanel;
     var wrappanel = fnc.uiControls.panels.wrappanel;
@@ -20,7 +22,17 @@ fnc.core.factory = (function () {
             }
 
             var controlObject = new uiElement();
-            if (dom.tagName === 'GRID') {
+            if (dom.tagName === 'LOADER') {
+                controlObject = new loader(dom, publicProperties, privateProperties);
+                for (var i = 0, child; child = dom.children[i]; i++) {
+                    controlObject.loadingStages.push(this.createUiControl(child, {}, {}));
+                }
+            } else if (dom.tagName === 'LOADING-STAGE') {
+                controlObject = new loadingStage(dom, publicProperties, privateProperties);
+                for(var i= 0, child; child = dom.children[i]; i++) {
+                    controlObject.children.push(this.createUiControl(child, {}, {}));
+                }
+            } else if (dom.tagName === 'GRID') {
                 controlObject = new grid(publicProperties['id'], publicProperties, privateProperties);
                 for(var i= 0, child; child = dom.children[i]; i++) {
                     controlObject.children.push(this.createUiControl(child, {}, {grid: controlObject}));
@@ -50,7 +62,11 @@ fnc.core.factory = (function () {
             } else if (dom.tagName === 'RADIOBUTTON') {
                 controlObject = new radiobutton(publicProperties['id'], publicProperties, privateProperties);
             } else { //use the tag as given
-                controlObject = new html5Control(dom.tagName.toLowerCase(), publicProperties['id'], dom.innerText, publicProperties, privateProperties);
+                var value = dom.innerText;
+                if (dom.firstChild && dom.firstChild.nodeType == 3) {
+                    value = dom.firstChild.data;
+                }
+                controlObject = new html5Control(dom.tagName.toLowerCase(), publicProperties['id'], value, publicProperties, privateProperties);
                 if(dom.children.length > 0) {
                     controlObject.children = new fncObjectCollection();
                     for(var i= 0, child; child = dom.children[i]; i++) {
