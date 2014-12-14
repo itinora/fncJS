@@ -6,15 +6,12 @@ fnc.uiControls.globals.rootVisual = (function () {
         if(child) {
             this.child = child;
         }
-        this.dom = document.getElementsByTagName('body')[0];
+        this.dom = document.body;
         var attributes = this.dom.attributes;
-        for (var i = 0, attr; attr = attributes[i]; i++){
+        for (var i = 0, attr; attr = attributes[i]; i++) {
             this.properties[attr.name] = attr.value;
             if(attr.name === 'standard-width') {
                 this.standardWidth = parseInt(attr.value);
-            }
-            if(attr.name === 'standard-height') {
-                this.standardHeight = parseInt(attr.value);
             }
         }
 
@@ -32,23 +29,23 @@ fnc.uiControls.globals.rootVisual = (function () {
     }
     rootVisual.prototype = new uiElement();
     rootVisual.prototype.render = function() {
+        var topLevelContainer = this.child.render({available_width: availableWidth, available_height: availableHeight});
+        var availableWidth = this.standardWidth > window.innerWidth ? this.standardWidth : window.innerWidth;
+        var availableHeight = this.standardWidth * window.innerHeight / window.innerWidth;
+        this.dom.style.width = availableWidth + 'px';
+        this.dom.style.height = availableHeight + 'px';
+
         var child = this.dom.getElementsByTagName(this.child.tag)[0];
         if(child) {
             this.dom.removeChild(child);
         }
-        var availableWidth = this.standardWidth > window.innerWidth ? this.standardWidth : window.innerWidth;
-        var availableHeight = this.standardHeight > window.innerHeight ? this.standardHeight : window.innerHeight;
-        this.dom.appendChild(this.child.render({available_width: availableWidth, available_height: availableHeight}));
+        this.dom.appendChild(topLevelContainer);
         this.scaleAsPerStandardDimensions();
     };
     rootVisual.prototype.scaleAsPerStandardDimensions = function() {
-        var scaleX = window.innerWidth / this.standardWidth;
-        if(scaleX < 1) {
-            this.dom.style.transform = this.dom.style.transform + " scaleX(" + scaleX + ")";
-        }
-        var scaleY = window.innerHeight / this.standardHeight;
-        if(scaleY < 1) {
-            this.dom.style.transform = this.dom.style.transform + " scaleY(" + scaleY + ")";
+        var scale = window.innerWidth / this.standardWidth;
+        if(scale < 1) {
+            this.dom.style.transform = this.dom.style.transform + " scaleX(" + scale + ") scaleY(" + scale + ")";
         }
     }
     return rootVisual;
