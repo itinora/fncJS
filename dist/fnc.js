@@ -194,10 +194,11 @@ fnc.uiControls.uiElement = (function(){
             var availableWidth = options['available_width'];
             var availableHeight = options['available_height'];
         }
-        this.width = (availableWidth || 100);       //default width 100px
-        this.height = (availableHeight || 20);      //default height 20px
-        elem.style.width = this.width + 'px';
-        elem.style.height = this.height + 'px';
+        elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
+        elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
+        this.width = elem.offsetWidth;
+        this.height = elem.offsetHeight;
+        elem.style.display = 'block';
         elem.style.position = "absolute";
 
         if (this.tag === 'div' || this.tag === 'span' || this.tag === 'ul' || this.tag === 'ol' || this.tag === 'li') {
