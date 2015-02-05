@@ -730,8 +730,8 @@ fnc.uiControls.globals.rootVisual = (function () {
         var attributes = this.dom.attributes;
         for (var i = 0, attr; attr = attributes[i]; i++) {
             this.properties[attr.name] = attr.value;
-            if(attr.name === 'standard-width') {
-                this.standardWidth = parseInt(attr.value);
+            if(attr.name === 'min-resolution-width') {
+                this.minResolutionWidth = parseInt(attr.value);
             }
         }
 
@@ -749,9 +749,9 @@ fnc.uiControls.globals.rootVisual = (function () {
     }
     rootVisual.prototype = new uiElement();
     rootVisual.prototype.render = function() {
-        var topLevelContainer = this.child.render({available_width: availableWidth, available_height: availableHeight});
-        var availableWidth = this.standardWidth > window.innerWidth ? this.standardWidth : window.innerWidth;
-        var availableHeight = this.standardWidth * window.innerHeight / window.innerWidth;
+        var topLevelContainer = this.child.render();
+        var availableWidth = this.minResolutionWidth > window.innerWidth ? this.minResolutionWidth : window.innerWidth;
+        var availableHeight = this.minResolutionWidth * window.innerHeight / window.innerWidth;
         this.dom.style.width = availableWidth + 'px';
         this.dom.style.height = availableHeight + 'px';
 
@@ -763,7 +763,7 @@ fnc.uiControls.globals.rootVisual = (function () {
         this.scaleAsPerStandardDimensions();
     };
     rootVisual.prototype.scaleAsPerStandardDimensions = function() {
-        var scale = window.innerWidth / this.standardWidth;
+        var scale = window.innerWidth / this.minResolutionWidth;
         if(scale < 1) {
             this.dom.style.transform = this.dom.style.transform + " scaleX(" + scale + ") scaleY(" + scale + ")";
         }
