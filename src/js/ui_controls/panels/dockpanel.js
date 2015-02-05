@@ -7,7 +7,7 @@ fnc.uiControls.panels.dockpanel = (function () {
         this.topStart = 0;
         this.bottomEnd = 0;
         this.height = 0;
-    }
+    };
     dockpanel.prototype = new panel();
     dockpanel.prototype.render = function(options) {
         //create this.dom as per parent

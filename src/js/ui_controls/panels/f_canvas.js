@@ -4,7 +4,7 @@ fnc.uiControls.panels.fCanvas = (function () {
     var f_canvas = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
         this.tag = "f-canvas";
-    }
+    };
     f_canvas.prototype = new panel();
     f_canvas.prototype.render = function(options) {
         //create this.dom as per parent
