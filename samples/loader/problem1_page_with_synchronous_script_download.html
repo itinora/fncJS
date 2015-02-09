@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+</head>
+    <body >
+        <div>
+            When browser encounters a script tag, it halts page rendering and all other downloads. The JavaScript files are downloaded one after the other. Till all the download is complete the page is not rendered.
+            <p>Observe that the DOM update triggered by the scripts happen only after all scripts have downloaded and finished execution.
+               The good part is that the order of script execution is maintained.
+        </div>
+        <div>Start of script 1 download</div>
+        <script src="./script1.js" ></script>
+        <div>End of script 1 download</div>
+        <div>Start of script 2 download</div>
+        <script src="./script2.js" ></script>
+        <div>End of script 2 download</div>
+        <div>Start of script 3 download</div>
+        <script src="./script3.js" ></script>
+        <div>End of script 3 download</div>
+        <div>Start of script 4 download</div>
+        <script src="./script4.js" ></script>
+        <div>End of script 4 download</div>
+    </body>
+</html>

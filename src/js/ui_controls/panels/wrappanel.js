@@ -1,5 +1,5 @@
-define(function (require) {
-    var panel = require('ui_controls/panels/panel');
+fnc.uiControls.panels.wrappanel = (function () {
+    var panel = fnc.uiControls.panels.panel;
 
     var wrappanel = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -29,20 +29,20 @@ define(function (require) {
             currentLeft = currentLeft + width;
 
         }
-        this.dom.style.width = currentLeft + 'px';
-        this.dom.style.height = (currentTop + maxHeight) + 'px';
+        this.dom.style.width = (currentLeft > this.width ? currentLeft : this.width) + 'px';
+        var newHeight = (currentTop + maxHeight);
+        this.dom.style.height = (newHeight > this.height ? newHeight : this.height) + 'px';
     }
 
     wrappanel.prototype = new panel();
-    wrappanel.prototype.render = function() {
+    wrappanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         placeChildrenInsideWrapPanel.call(this);
-        panel.prototype.applyExplicitStyles.call(this);
         return this.dom;
     };
     return wrappanel;
-});
+})();
 

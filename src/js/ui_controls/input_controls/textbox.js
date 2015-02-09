@@ -1,5 +1,5 @@
-define(function (require) {
-    var uiElement = require('ui_controls/ui_element');
+fnc.uiControls.inputControls.textbox = (function () {
+    var uiElement = fnc.uiControls.uiElement;
 
     var textbox = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -11,7 +11,6 @@ define(function (require) {
     textbox.prototype.render = function() {
         //create this.dom as per parent
         uiElement.prototype.render.call(this);
-        this.applyExplicitStyles();
 
         var input = document.createElement('input');
         input.setAttribute('type', 'text');
@@ -31,4 +30,4 @@ define(function (require) {
     }
 
     return textbox;
-});
+})();

@@ -1,5 +1,5 @@
-define(function (require) {
-    var panel = require('ui_controls/panels/panel');
+fnc.uiControls.panels.stackpanel = (function () {
+    var panel = fnc.uiControls.panels.panel;
 
     var stackpanel = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -21,7 +21,7 @@ define(function (require) {
                 }
             }
             this.dom.style.width = currentLeft + 'px';
-            this.dom.style.height = maxHeight + 'px';
+            this.dom.style.height = (maxHeight > this.height ? maxHeight : this.height) + 'px';
         } else {
             var currentTop = 0;
             var maxWidth = 0;
@@ -36,20 +36,19 @@ define(function (require) {
                 }
             }
             this.dom.style.height = currentTop + 'px';
-            this.dom.style.width = maxWidth + 'px';
+            this.dom.style.width = (maxWidth > this.width ? maxWidth : this.width) + 'px';
         }
     }
 
     stackpanel.prototype = new panel();
-    stackpanel.prototype.render = function() {
+    stackpanel.prototype.render = function(options) {
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         this.renderChildren();
         setChildrenOrientation.call(this);
-        this.applyExplicitStyles();
         return this.dom;
     };
     return stackpanel;
-});
+})();
 

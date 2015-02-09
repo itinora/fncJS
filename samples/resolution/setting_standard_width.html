@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../src/css/default.css" >
+</head>
+    <body min-resolution-width="1920" >
+        <grid id="layoutRoot" rows="3" cols="2" rowheights="40 * 20" colwidths="* 150" >
+            <div grid.row="0" grid.colspan="2">Header</div>
+            <div grid.row="1" grid.col="0">
+                min-resolution-width attribute is set at the body tag to 1920.
+                If the width of the viewport is equal to or more than 1920px, the ui controls will maintain their origin dimensions as specified. e.g. Sidebar will remain 150px wide.
+                But if the width of the viewport reduces below 1000px, then the whole ui will be scaled horizontally to fit in the given area. e.g. if the viewport width is 500, Sidebar width will look like 75px to fit in.
+                Similarly height will be scaled as per standard-height
+            </div>
+            <div grid.row="1" grid.col="1">Sidebar</div>
+            <div grid.row="2" grid.colspan="2">Footer</div>
+        </grid>
+        <script src="../../dist/fnc.min.js" ></script>
+    </body>
+</html>

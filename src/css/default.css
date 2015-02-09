@@ -1,4 +1,18 @@
-grid, stackpanel, wrappanel, f-canvas {
+html, body, div {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    transform-origin: 0 0;
+    overflow: hidden;
+}
+
+grid, stackpanel, wrappanel, f-canvas, dockpanel {
     background: lightgray;
     width: 300px;
     height: 200px;

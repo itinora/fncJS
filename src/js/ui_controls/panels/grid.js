@@ -1,5 +1,5 @@
-define(function (require) {
-    var panel = require('ui_controls/panels/panel');
+fnc.uiControls.panels.grid = (function () {
+    var panel = fnc.uiControls.panels.panel;
 
     var grid = function (name, publicProperties, privateProperties) {
         this.initialize(name, publicProperties, privateProperties);
@@ -8,7 +8,7 @@ define(function (require) {
         this.cols = [];
     }
     grid.prototype = new panel();
-    grid.prototype.render = function() {
+    grid.prototype.render = function(options) {
         var parseCompositeProperty = function(propertyInDom, maxPropertyValue, toBeAddedTo, toBeAddedWithPropertyName) {
             var parts = propertyInDom.split(' ');
             var cummulativeValue = 0;
@@ -24,14 +24,19 @@ define(function (require) {
                     }
                 } else if (part === '*') {  //add the remaining value to this part
                     var prop = {};
-                    prop[toBeAddedWithPropertyName] =  maxPropertyValue - cummulativeValue;
+                    prop[toBeAddedWithPropertyName] =  '*';
                     toBeAddedTo.push(prop);
-                    cummulativeValue = maxPropertyValue;
                 } else {    //number in pixel
                     cummulativeValue = cummulativeValue + partNumeric;
                     var prop = {};
                     prop[toBeAddedWithPropertyName] = partNumeric;
                     toBeAddedTo.push(prop);
+                }
+            }
+            for(var i = 0, prop; prop = toBeAddedTo[i]; i++) {
+                if(prop[toBeAddedWithPropertyName] === '*') {
+                    prop[toBeAddedWithPropertyName] = maxPropertyValue - cummulativeValue;
+                    cummulativeValue = maxPropertyValue;
                 }
             }
             if (cummulativeValue > 0) {
@@ -41,7 +46,7 @@ define(function (require) {
 
         var parseRowHeights = function() {
             if(this.properties['rowheights']) {
-                parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.properties['height']), this.rows, 'height');
+                parseCompositeProperty.call(this, this.properties['rowheights'], this.height, this.rows, 'height');
                 var rows = this["rows"];
                 var currentTop = 0;
                 for (var i = 0, row; row = rows[i]; i++) {
@@ -53,7 +58,7 @@ define(function (require) {
 
         var parseColWidths = function() {
             if(this.properties['colwidths']) {
-                parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.properties['width']), this.cols, 'width');
+                parseCompositeProperty.call(this, this.properties['colwidths'], this.width, this.cols, 'width');
                 var cols = this["cols"];
                 var currentLeft = 0;
                 for (var i = 0, col; col = cols[i]; i++) {
@@ -65,16 +70,15 @@ define(function (require) {
 
 
         //create this.dom as per parent
-        panel.prototype.render.call(this);
+        panel.prototype.render.call(this, options);
 
         //parse grid specific properties
         parseRowHeights.call(this);
         parseColWidths.call(this);
-        panel.prototype.applyExplicitStyles.call(this);
 
         this.renderChildren();
         return this.dom;
     };
     return grid;
-});
+})();
 

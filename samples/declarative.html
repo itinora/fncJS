@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../src/css/default.css" >
-</head>
-<body>
-    <script data-main="../src/js/main.js" src="../src/js/require-min.js"></script>
-    <script src="../src/js/fnc.js"></script>
-    <grid id="layoutRoot" rows="5" cols="4" rowheights="10% 25% 25% 25% *" colwidths="150 200 200 200" height="300" >
-        <label grid.colspan="4">User profile</label>
-        <label grid.row="1" grid.col="0">Name</label>
-        <textbox grid.row="1" grid.col="1" placeholder="First"></textbox>
-        <textbox grid.row="1" grid.col="2" placeholder="Middle"></textbox>
-        <textbox grid.row="1" grid.col="3" placeholder="Last"></textbox>
-        <label grid.row="2" grid.col="0">Sex</label>
-        <radiobutton id="male" grid.row="2" grid.col="1" value="Male" ></radiobutton>
-        <radiobutton id="female" grid.row="2" grid.col="2" value="Female" ></radiobutton>
-        <label grid.row="3" grid.col="0">Age Range</label>
-        <select grid.row="3" grid.col="1">
-            <option>0 to 20 years</option>
-            <option>20 to 40 years</option>
-            <option>40 years and above</option>
-        </select>
-        <button grid.row="4" grid.col="3" >Save details</button>
-    </grid>
-</body>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../src/css/default.css" >
+    </head>
+    <body>
+        <grid id="layoutRoot" rows="5" cols="4" rowheights="10% 25% 25% 25% *" colwidths="150 200 200 200" height="300" >
+            <label grid.colspan="4">User profile</label>
+            <label grid.row="1" grid.col="0">Name</label>
+            <textbox grid.row="1" grid.col="1" placeholder="First"></textbox>
+            <textbox grid.row="1" grid.col="2" placeholder="Middle"></textbox>
+            <textbox grid.row="1" grid.col="3" placeholder="Last"></textbox>
+            <label grid.row="2" grid.col="0">Sex</label>
+            <radiobutton id="male" grid.row="2" grid.col="1" value="Male" ></radiobutton>
+            <radiobutton id="female" grid.row="2" grid.col="2" value="Female" ></radiobutton>
+            <label grid.row="3" grid.col="0">Age Range</label>
+            <select grid.row="3" grid.col="1">
+                <option>0 to 20 years</option>
+                <option>20 to 40 years</option>
+                <option>40 years and above</option>
+            </select>
+            <button grid.row="4" grid.col="3" >Save details</button>
+        </grid>
+        <script src="../dist/fnc.min.js" ></script>
+    </body>
 </html>
