@@ -5,3 +5,4 @@ fnc.uiControls.globals = {};
 fnc.uiControls.inputControls = {};
 fnc.uiControls.orchestrators = {};
 fnc.uiControls.panels = {};
+fnc.staticMethods = {};

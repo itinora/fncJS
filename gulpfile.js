@@ -20,6 +20,7 @@ var sourceFiles = [
     './src/js/ui_controls/orchestrators/loadingStage.js',
     './src/js/ui_controls/orchestrators/loader.js',
     './src/js/core/factory.js',
+    './src/js/static_methods.js',
     './src/js/ui_controls/globals/root_visual.js',
     './src/js/main.js'];
 

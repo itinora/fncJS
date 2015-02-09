@@ -5,6 +5,7 @@ fnc.uiControls.globals = {};
 fnc.uiControls.inputControls = {};
 fnc.uiControls.orchestrators = {};
 fnc.uiControls.panels = {};
+fnc.staticMethods = {};
 
 fnc.core.fncObject = (function () {
     var fncObject = function () {
@@ -200,8 +201,8 @@ fnc.uiControls.uiElement = (function(){
         } else {
             elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
             elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
-            this.width = availableWidth ? elem.offsetWidth : 0;
-            this.height = availableHeight ? elem.offsetHeight : 0;
+            this.width = availableWidth ? elem.offsetWidth : window.innerWidth;
+            this.height = availableHeight ? elem.offsetHeight : window.innerHeight;
         }
 
         elem.style.display = 'block';
@@ -243,12 +244,14 @@ fnc.uiControls.html5Control = (function () {
 
     var renderChildren = function() {
         for(var i= 0, child; child = this.children.get(i); i++) {
-            var childDOM = child.render();
-            childDOM.style.position = "static";
-            childDOM.style.width = null;
-            childDOM.style.height = null;
+            if(child.tagName !== 'BR') {
+                var childDOM = child.render();
+                childDOM.style.position = "static";
+                childDOM.style.width = null;
+                childDOM.style.height = null;
 
-            this.dom.appendChild(childDOM);
+                this.dom.appendChild(childDOM);
+            }
         }
     };
 
@@ -256,7 +259,9 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function(options) {
         uiElement.prototype.render.call(this, options);
-        this.dom.innerText = this.value;    //any text put directly under div before the child elements
+        if(this.dom.tagName !== 'IMG') {
+            this.dom.innerText = this.value;    //any text put directly under div before the child elements
+        }
         if(this.children) {
             renderChildren.call(this);
         }
@@ -427,8 +432,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseRowHeights = function() {
             if(this.properties['rowheights']) {
-                var maxValue = this.height > 0 ? this.height : window.innerHeight;
-                parseCompositeProperty.call(this, this.properties['rowheights'], maxValue, this.rows, 'height');
+                parseCompositeProperty.call(this, this.properties['rowheights'], this.height, this.rows, 'height');
                 var rows = this["rows"];
                 var currentTop = 0;
                 for (var i = 0, row; row = rows[i]; i++) {
@@ -440,8 +444,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseColWidths = function() {
             if(this.properties['colwidths']) {
-                var maxValue = this.width > 0 ? this.width : window.innerWidth;
-                parseCompositeProperty.call(this, this.properties['colwidths'], maxValue, this.cols, 'width');
+                parseCompositeProperty.call(this, this.properties['colwidths'], this.width, this.cols, 'width');
                 var cols = this["cols"];
                 var currentLeft = 0;
                 for (var i = 0, col; col = cols[i]; i++) {
@@ -730,6 +733,11 @@ fnc.core.factory = (function () {
 
 })();
 
+fnc.staticMethods.refreshDOM = function(dom) {
+    var factory = fnc.core.factory;
+    var fncDOM = factory.createUiControl(dom);
+    return fncDOM.render();
+};
 fnc.uiControls.globals.rootVisual = (function () {
     var uiElement = fnc.uiControls.uiElement;
     var factory = fnc.core.factory;
