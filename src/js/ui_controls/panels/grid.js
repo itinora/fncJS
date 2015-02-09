@@ -33,7 +33,7 @@ fnc.uiControls.panels.grid = (function () {
                     toBeAddedTo.push(prop);
                 }
             }
-            for(var i= 0, prop; prop = toBeAddedTo[i]; i++) {
+            for(var i = 0, prop; prop = toBeAddedTo[i]; i++) {
                 if(prop[toBeAddedWithPropertyName] === '*') {
                     prop[toBeAddedWithPropertyName] = maxPropertyValue - cummulativeValue;
                     cummulativeValue = maxPropertyValue;

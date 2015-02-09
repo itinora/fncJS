@@ -74,7 +74,7 @@ fnc.uiControls.uiElement = (function(){
                 }
                 var height = 0;
                 for(var r=0, row; row = grid.rows[startWithRow + r], r < rowSpan; r++) {
-                        height = height + row["width"];
+                        height = height + row["height"];
                 }
 
                 if(this.dom.tagName !== 'SELECT' && this.dom.getAttribute('type') !== 'radio') { //for radio buttons and select controls if height and width are set it shows up big in size
@@ -151,10 +151,16 @@ fnc.uiControls.uiElement = (function(){
             var availableWidth = options['available_width'];
             var availableHeight = options['available_height'];
         }
-        elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
-        elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
-        this.width = elem.offsetWidth;
-        this.height = elem.offsetHeight;
+
+        if(this.dom.tagName === 'SELECT' || this.dom.getAttribute('type') === 'radio') {
+            elem.style.height = '20px'; //default height for select and radio controls
+        } else {
+            elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
+            elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
+            this.width = availableWidth ? elem.offsetWidth : window.innerWidth;
+            this.height = availableHeight ? elem.offsetHeight : window.innerHeight;
+        }
+
         elem.style.display = 'block';
         elem.style.position = "absolute";
 
@@ -172,8 +178,8 @@ fnc.uiControls.uiElement = (function(){
         this.dom = document.createElement(this.tag);
         setDomNameValueAndProperties.call(this);
         applyDefaultUIStyles.call(this, options);
-        applyExplicitStyles.call(this);
         setPositionAndDimensionRelativeToParent.call(this);
+        applyExplicitStyles.call(this);
         return this.dom;
     };
     return uiElement;

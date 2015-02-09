@@ -117,7 +117,7 @@ fnc.uiControls.uiElement = (function(){
                 }
                 var height = 0;
                 for(var r=0, row; row = grid.rows[startWithRow + r], r < rowSpan; r++) {
-                        height = height + row["width"];
+                        height = height + row["height"];
                 }
 
                 if(this.dom.tagName !== 'SELECT' && this.dom.getAttribute('type') !== 'radio') { //for radio buttons and select controls if height and width are set it shows up big in size
@@ -194,10 +194,16 @@ fnc.uiControls.uiElement = (function(){
             var availableWidth = options['available_width'];
             var availableHeight = options['available_height'];
         }
-        elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
-        elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
-        this.width = elem.offsetWidth;
-        this.height = elem.offsetHeight;
+
+        if(this.dom.tagName === 'SELECT' || this.dom.getAttribute('type') === 'radio') {
+            elem.style.height = '20px'; //default height for select and radio controls
+        } else {
+            elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
+            elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
+            this.width = availableWidth ? elem.offsetWidth : 0;
+            this.height = availableHeight ? elem.offsetHeight : 0;
+        }
+
         elem.style.display = 'block';
         elem.style.position = "absolute";
 
@@ -215,8 +221,8 @@ fnc.uiControls.uiElement = (function(){
         this.dom = document.createElement(this.tag);
         setDomNameValueAndProperties.call(this);
         applyDefaultUIStyles.call(this, options);
-        applyExplicitStyles.call(this);
         setPositionAndDimensionRelativeToParent.call(this);
+        applyExplicitStyles.call(this);
         return this.dom;
     };
     return uiElement;
@@ -250,8 +256,8 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function(options) {
         uiElement.prototype.render.call(this, options);
+        this.dom.innerText = this.value;    //any text put directly under div before the child elements
         if(this.children) {
-            this.dom.innerText = this.value;    //any text put directly under div before the child elements
             renderChildren.call(this);
         }
         return this.dom;
@@ -335,7 +341,7 @@ fnc.uiControls.panels.panel = (function () {
             panel.prototype.initialize.call(this, name, publicProperties, privateProperties);
             this.children = new fncObjectCollection();
         };
-    }
+    };
 
     panel.prototype = new uiElement();
     panel.prototype.render = function(options) {
@@ -343,13 +349,13 @@ fnc.uiControls.panels.panel = (function () {
         uiElement.prototype.render.call(this, options);
 
         this.dom.style.position = "relative";
-    }
+    };
 
     panel.prototype.renderChildren = function(options) {
         for(var i= 0, child; child = this.children.get(i); i++) {
             this.dom.appendChild(child.render(options));
         }
-    }
+    };
     return panel;
 })();
 
@@ -408,7 +414,7 @@ fnc.uiControls.panels.grid = (function () {
                     toBeAddedTo.push(prop);
                 }
             }
-            for(var i= 0, prop; prop = toBeAddedTo[i]; i++) {
+            for(var i = 0, prop; prop = toBeAddedTo[i]; i++) {
                 if(prop[toBeAddedWithPropertyName] === '*') {
                     prop[toBeAddedWithPropertyName] = maxPropertyValue - cummulativeValue;
                     cummulativeValue = maxPropertyValue;
@@ -421,7 +427,8 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseRowHeights = function() {
             if(this.properties['rowheights']) {
-                parseCompositeProperty.call(this, this.properties['rowheights'], this.height, this.rows, 'height');
+                var maxValue = this.height > 0 ? this.height : window.innerHeight;
+                parseCompositeProperty.call(this, this.properties['rowheights'], maxValue, this.rows, 'height');
                 var rows = this["rows"];
                 var currentTop = 0;
                 for (var i = 0, row; row = rows[i]; i++) {
@@ -433,7 +440,8 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseColWidths = function() {
             if(this.properties['colwidths']) {
-                parseCompositeProperty.call(this, this.properties['colwidths'], this.width, this.cols, 'width');
+                var maxValue = this.width > 0 ? this.width : window.innerWidth;
+                parseCompositeProperty.call(this, this.properties['colwidths'], maxValue, this.cols, 'width');
                 var cols = this["cols"];
                 var currentLeft = 0;
                 for (var i = 0, col; col = cols[i]; i++) {
@@ -480,7 +488,7 @@ fnc.uiControls.panels.stackpanel = (function () {
                     maxHeight = height;
                 }
             }
-            this.dom.style.width = (currentLeft > this.width ? currentLeft : this.width) + 'px';
+            this.dom.style.width = currentLeft + 'px';
             this.dom.style.height = (maxHeight > this.height ? maxHeight : this.height) + 'px';
         } else {
             var currentTop = 0;
@@ -495,7 +503,7 @@ fnc.uiControls.panels.stackpanel = (function () {
                     maxWidth = width;
                 }
             }
-            this.dom.style.height = (currentTop > this.height ? currentTop : this.height) + 'px';
+            this.dom.style.height = currentTop + 'px';
             this.dom.style.width = (maxWidth > this.width ? maxWidth : this.width) + 'px';
         }
     }
@@ -598,6 +606,10 @@ fnc.uiControls.orchestrators.loadingStage = (function () {
         this.dom = document.createElement(this.tag);
         for(var i= 0, child; child = this.children.get(i); i++) {
             if(child.tag === 'javascript') {
+                var script = document.createElement('script');
+                script.src = child.properties['src'];
+                script.async = false;
+                document.head.appendChild(script);
 
             } else {
                 var childDOM = child.render();
@@ -749,7 +761,7 @@ fnc.uiControls.globals.rootVisual = (function () {
     }
     rootVisual.prototype = new uiElement();
     rootVisual.prototype.render = function() {
-        var topLevelContainer = this.child.render();
+        var topLevelContainer = this.child.render({available_width: availableWidth, available_height: availableHeight});
         var availableWidth = this.minResolutionWidth > window.innerWidth ? this.minResolutionWidth : window.innerWidth;
         var availableHeight = this.minResolutionWidth * window.innerHeight / window.innerWidth;
         this.dom.style.width = availableWidth + 'px';

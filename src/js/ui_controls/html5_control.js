@@ -25,8 +25,8 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function(options) {
         uiElement.prototype.render.call(this, options);
+        this.dom.innerText = this.value;    //any text put directly under div before the child elements
         if(this.children) {
-            this.dom.innerText = this.value;    //any text put directly under div before the child elements
             renderChildren.call(this);
         }
         return this.dom;

@@ -7,7 +7,7 @@ fnc.uiControls.panels.panel = (function () {
             panel.prototype.initialize.call(this, name, publicProperties, privateProperties);
             this.children = new fncObjectCollection();
         };
-    }
+    };
 
     panel.prototype = new uiElement();
     panel.prototype.render = function(options) {
@@ -15,13 +15,13 @@ fnc.uiControls.panels.panel = (function () {
         uiElement.prototype.render.call(this, options);
 
         this.dom.style.position = "relative";
-    }
+    };
 
     panel.prototype.renderChildren = function(options) {
         for(var i= 0, child; child = this.children.get(i); i++) {
             this.dom.appendChild(child.render(options));
         }
-    }
+    };
     return panel;
 })();
 
