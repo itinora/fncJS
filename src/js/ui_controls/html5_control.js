@@ -26,7 +26,7 @@ fnc.uiControls.html5Control = (function () {
     html5Control.prototype.render = function(options) {
         uiElement.prototype.render.call(this, options);
         if(this.dom.tagName !== 'IMG') {
-            this.dom.innerText = this.value;    //any text put directly under div before the child elements
+            this.dom.innerText = this.value.trim();    //any text put directly under div before the child elements
         }
         if(this.children) {
             renderChildren.call(this);
