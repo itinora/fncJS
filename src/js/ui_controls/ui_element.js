@@ -111,10 +111,12 @@ fnc.uiControls.uiElement = (function(){
                     style.height = dockpanel.bottomEnd - dockpanel.topStart + 'px';
                 }
                 var dock = this.properties[key];
+                var elemHeight = style.height.slice(0, -2);
+                var elemWidth = style.width.slice(0, -2);
                 if(dock.indexOf('top') > -1) {
                     style.top = dockpanel.topStart + "px";
-                    dockpanel.topStart = dockpanel.topStart + parseInt(style.height.slice(0, -2));
-                    var width = parseInt(style.width.slice(0, -2));
+                    dockpanel.topStart = dockpanel.topStart + parseInt(elemHeight);
+                    var width = parseInt(elemWidth);
                     if(dock === 'top-left') {
                         style.left = '0';
                     } else if(dock === 'top-right') {
@@ -123,9 +125,9 @@ fnc.uiControls.uiElement = (function(){
                         style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock.indexOf('bottom') > -1) {
-                    style.top = (dockpanel.bottomEnd - parseInt(style.height.slice(0,-2))) + "px";
-                    dockpanel.bottomEnd = dockpanel.bottomEnd - parseInt(style.height.slice(0, -2));
-                    var width = parseInt(style.width.slice(0, -2));
+                    style.top = (dockpanel.bottomEnd - parseInt(elemHeight)) + "px";
+                    dockpanel.bottomEnd = dockpanel.bottomEnd - parseInt(elemHeight);
+                    var width = parseInt(elemWidth);
                     if(dock === 'bottom-left') {
                         style.left = '0';
                     } else if(dock === 'bottom-right') {
@@ -134,11 +136,11 @@ fnc.uiControls.uiElement = (function(){
                         style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock === 'left') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
+                    style.top = (dockpanel.height - parseInt(elemHeight)) / 2 + 'px';
                     style.left = '0';
                 } else if(dock === 'right') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
-                    var width = parseInt(style.width.slice(0, -2));
+                    style.top = (dockpanel.height - parseInt(elemHeight)) / 2 + 'px';
+                    var width = parseInt(elemWidth);
                     style.left = (dockpanel.width - width) + 'px';
                 }
             }
@@ -155,10 +157,8 @@ fnc.uiControls.uiElement = (function(){
         if(this.dom.tagName === 'SELECT' || this.dom.getAttribute('type') === 'radio') {
             elem.style.height = '20px'; //default height for select and radio controls
         } else {
-            elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
-            elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
-            this.width = availableWidth ? elem.offsetWidth : window.innerWidth;
-            this.height = availableHeight ? elem.offsetHeight : window.innerHeight;
+            elem.style.width = availableWidth ? availableWidth + 'px' : window.innerWidth + 'px';
+            elem.style.height = availableHeight ? availableHeight + 'px' : window.innerHeight + 'px';
         }
 
         elem.style.display = 'block';

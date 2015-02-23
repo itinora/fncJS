@@ -39,7 +39,7 @@ fnc.uiControls.panels.wrappanel = (function () {
         //create this.dom as per parent
         panel.prototype.render.call(this, options);
 
-        this.renderChildren();
+        this.renderChildren({available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
         placeChildrenInsideWrapPanel.call(this);
         return this.dom;
     };

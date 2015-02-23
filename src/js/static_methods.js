@@ -1,5 +1,5 @@
-fnc.staticMethods.refreshDOM = function(dom) {
+fnc.staticMethods.refreshDOM = function(dom, options) {
     var factory = fnc.core.factory;
     var fncDOM = factory.createUiControl(dom);
-    return fncDOM.render();
+    return fncDOM.render(options);
 };
