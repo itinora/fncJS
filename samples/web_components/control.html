@@ -1,0 +1,23 @@
+<template>
+    <stackpanel orientation="horizontal" >
+        <div width="150" style="background-color: red">Control</div>
+        <div width="240" style="background-color: blue"></div>
+    </stackpanel>
+</template>
+
+<script>
+    var doc = this.document._currentScript.ownerDocument;
+
+    var myControl = document.registerElement('my-control', {
+        prototype: Object.create(HTMLElement.prototype, {
+            createdCallback: {
+                value: function() {
+                    var root = this.createShadowRoot();
+                    var template = doc.querySelector('template');
+                    var clone = document.importNode(template.content, true);
+                    root.appendChild(clone);
+                }
+            }
+        })
+    });
+</script>

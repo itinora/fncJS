@@ -155,10 +155,12 @@ fnc.uiControls.uiElement = (function(){
                     style.height = dockpanel.bottomEnd - dockpanel.topStart + 'px';
                 }
                 var dock = this.properties[key];
+                var elemHeight = style.height.slice(0, -2);
+                var elemWidth = style.width.slice(0, -2);
                 if(dock.indexOf('top') > -1) {
                     style.top = dockpanel.topStart + "px";
-                    dockpanel.topStart = dockpanel.topStart + parseInt(style.height.slice(0, -2));
-                    var width = parseInt(style.width.slice(0, -2));
+                    dockpanel.topStart = dockpanel.topStart + parseInt(elemHeight);
+                    var width = parseInt(elemWidth);
                     if(dock === 'top-left') {
                         style.left = '0';
                     } else if(dock === 'top-right') {
@@ -167,9 +169,9 @@ fnc.uiControls.uiElement = (function(){
                         style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock.indexOf('bottom') > -1) {
-                    style.top = (dockpanel.bottomEnd - parseInt(style.height.slice(0,-2))) + "px";
-                    dockpanel.bottomEnd = dockpanel.bottomEnd - parseInt(style.height.slice(0, -2));
-                    var width = parseInt(style.width.slice(0, -2));
+                    style.top = (dockpanel.bottomEnd - parseInt(elemHeight)) + "px";
+                    dockpanel.bottomEnd = dockpanel.bottomEnd - parseInt(elemHeight);
+                    var width = parseInt(elemWidth);
                     if(dock === 'bottom-left') {
                         style.left = '0';
                     } else if(dock === 'bottom-right') {
@@ -178,11 +180,11 @@ fnc.uiControls.uiElement = (function(){
                         style.left = (dockpanel.width - width) / 2 + 'px';
                     }
                 } else if(dock === 'left') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
+                    style.top = (dockpanel.height - parseInt(elemHeight)) / 2 + 'px';
                     style.left = '0';
                 } else if(dock === 'right') {
-                    style.top = (dockpanel.height - parseInt(style.height.slice(0, -2))) / 2 + 'px';
-                    var width = parseInt(style.width.slice(0, -2));
+                    style.top = (dockpanel.height - parseInt(elemHeight)) / 2 + 'px';
+                    var width = parseInt(elemWidth);
                     style.left = (dockpanel.width - width) + 'px';
                 }
             }
@@ -199,10 +201,8 @@ fnc.uiControls.uiElement = (function(){
         if(this.dom.tagName === 'SELECT' || this.dom.getAttribute('type') === 'radio') {
             elem.style.height = '20px'; //default height for select and radio controls
         } else {
-            elem.style.width = availableWidth ? availableWidth + 'px' : '100%';
-            elem.style.height = availableHeight ? availableHeight + 'px' : '100%';
-            this.width = availableWidth ? elem.offsetWidth : window.innerWidth;
-            this.height = availableHeight ? elem.offsetHeight : window.innerHeight;
+            elem.style.width = availableWidth ? availableWidth + 'px' : window.innerWidth + 'px';
+            elem.style.height = availableHeight ? availableHeight + 'px' : window.innerHeight + 'px';
         }
 
         elem.style.display = 'block';
@@ -224,6 +224,17 @@ fnc.uiControls.uiElement = (function(){
         applyDefaultUIStyles.call(this, options);
         setPositionAndDimensionRelativeToParent.call(this);
         applyExplicitStyles.call(this);
+
+        //render shadow dom if exists
+        if(this.dom.shadowRoot) {
+            for(var i= 0, shadowDom; shadowDom = this.dom.shadowRoot.children[i]; i++) {
+                if(shadowDom.tagName !== 'STYLE') {
+                    var refreshDOM = fnc.staticMethods.refreshDOM(shadowDom, {available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
+                    this.dom.shadowRoot.removeChild(shadowDom);
+                    this.dom.shadowRoot.appendChild(refreshDOM);
+                }
+            }
+        }
         return this.dom;
     };
     return uiElement;
@@ -244,14 +255,12 @@ fnc.uiControls.html5Control = (function () {
 
     var renderChildren = function() {
         for(var i= 0, child; child = this.children.get(i); i++) {
-            if(child.tagName !== 'BR') {
-                var childDOM = child.render();
-                childDOM.style.position = "static";
-                childDOM.style.width = null;
-                childDOM.style.height = null;
+            var childDOM = child.render({available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
+            childDOM.style.position = "static";
+            childDOM.style.width = null;
+            childDOM.style.height = null;
 
-                this.dom.appendChild(childDOM);
-            }
+            this.dom.appendChild(childDOM);
         }
     };
 
@@ -259,8 +268,8 @@ fnc.uiControls.html5Control = (function () {
 
     html5Control.prototype.render = function(options) {
         uiElement.prototype.render.call(this, options);
-        if(this.dom.tagName !== 'IMG') {
-            this.dom.innerText = this.value;    //any text put directly under div before the child elements
+        if(this.dom.tagName !== 'IMG' && this.dom.tagName !== 'PARAM' && this.dom.tagName !== 'INPUT' ) {
+            this.dom.innerText = this.value.trim();    //any text put directly under div before the child elements
         }
         if(this.children) {
             renderChildren.call(this);
@@ -354,6 +363,7 @@ fnc.uiControls.panels.panel = (function () {
         uiElement.prototype.render.call(this, options);
 
         this.dom.style.position = "relative";
+        this.dom.style.display = "block";
     };
 
     panel.prototype.renderChildren = function(options) {
@@ -432,7 +442,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseRowHeights = function() {
             if(this.properties['rowheights']) {
-                parseCompositeProperty.call(this, this.properties['rowheights'], this.height, this.rows, 'height');
+                parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.dom.style.height), this.rows, 'height');
                 var rows = this["rows"];
                 var currentTop = 0;
                 for (var i = 0, row; row = rows[i]; i++) {
@@ -444,7 +454,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseColWidths = function() {
             if(this.properties['colwidths']) {
-                parseCompositeProperty.call(this, this.properties['colwidths'], this.width, this.cols, 'width');
+                parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.dom.style.width), this.cols, 'width');
                 var cols = this["cols"];
                 var currentLeft = 0;
                 for (var i = 0, col; col = cols[i]; i++) {
@@ -462,7 +472,7 @@ fnc.uiControls.panels.grid = (function () {
         parseRowHeights.call(this);
         parseColWidths.call(this);
 
-        this.renderChildren();
+        this.renderChildren({available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
         return this.dom;
     };
     return grid;
@@ -484,8 +494,8 @@ fnc.uiControls.panels.stackpanel = (function () {
             for(var i= 0, child; child=this.children.get(i); i++) {
                 var style = child.dom.style;
                 style.left = currentLeft + 'px';
-                var width = parseInt(style.width.slice(0, -2));
-                var height = parseInt(style.height.slice(0, -2));
+                var width = child.width;
+                var height = child.height;
                 currentLeft = currentLeft + width;
                 if(height > maxHeight) {
                     maxHeight = height;
@@ -499,8 +509,8 @@ fnc.uiControls.panels.stackpanel = (function () {
             for(var i= 0, child; child=this.children.get(i); i++) {
                 var style = child.dom.style;
                 style.top = currentTop + 'px';
-                var height = parseInt(style.height.slice(0, -2));
-                var width = parseInt(style.width.slice(0, -2));
+                var height = child.height;
+                var width = child.width;
                 currentTop = currentTop + height;
                 if(width > maxWidth) {
                     maxWidth = width;
@@ -516,7 +526,7 @@ fnc.uiControls.panels.stackpanel = (function () {
         //create this.dom as per parent
         panel.prototype.render.call(this, options);
 
-        this.renderChildren();
+        this.renderChildren({available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
         setChildrenOrientation.call(this);
         return this.dom;
     };
@@ -565,7 +575,7 @@ fnc.uiControls.panels.wrappanel = (function () {
         //create this.dom as per parent
         panel.prototype.render.call(this, options);
 
-        this.renderChildren();
+        this.renderChildren({available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
         placeChildrenInsideWrapPanel.call(this);
         return this.dom;
     };
@@ -733,10 +743,10 @@ fnc.core.factory = (function () {
 
 })();
 
-fnc.staticMethods.refreshDOM = function(dom) {
+fnc.staticMethods.refreshDOM = function(dom, options) {
     var factory = fnc.core.factory;
     var fncDOM = factory.createUiControl(dom);
-    return fncDOM.render();
+    return fncDOM.render(options);
 };
 fnc.uiControls.globals.rootVisual = (function () {
     var uiElement = fnc.uiControls.uiElement;
@@ -792,4 +802,7 @@ fnc.uiControls.globals.rootVisual = (function () {
 })();
 
 
-fnc.body = new fnc.uiControls.globals.rootVisual();
+document.body.onload = function() {
+    fnc.body = new fnc.uiControls.globals.rootVisual();
+};
+

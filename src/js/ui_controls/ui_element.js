@@ -180,6 +180,17 @@ fnc.uiControls.uiElement = (function(){
         applyDefaultUIStyles.call(this, options);
         setPositionAndDimensionRelativeToParent.call(this);
         applyExplicitStyles.call(this);
+
+        //render shadow dom if exists
+        if(this.dom.shadowRoot) {
+            for(var i= 0, shadowDom; shadowDom = this.dom.shadowRoot.children[i]; i++) {
+                if(shadowDom.tagName !== 'STYLE') {
+                    var refreshDOM = fnc.staticMethods.refreshDOM(shadowDom, {available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
+                    this.dom.shadowRoot.removeChild(shadowDom);
+                    this.dom.shadowRoot.appendChild(refreshDOM);
+                }
+            }
+        }
         return this.dom;
     };
     return uiElement;
