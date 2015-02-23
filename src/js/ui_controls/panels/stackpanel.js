@@ -13,8 +13,8 @@ fnc.uiControls.panels.stackpanel = (function () {
             for(var i= 0, child; child=this.children.get(i); i++) {
                 var style = child.dom.style;
                 style.left = currentLeft + 'px';
-                var width = parseInt(style.width.slice(0, -2));
-                var height = parseInt(style.height.slice(0, -2));
+                var width = child.width;
+                var height = child.height;
                 currentLeft = currentLeft + width;
                 if(height > maxHeight) {
                     maxHeight = height;
@@ -28,8 +28,8 @@ fnc.uiControls.panels.stackpanel = (function () {
             for(var i= 0, child; child=this.children.get(i); i++) {
                 var style = child.dom.style;
                 style.top = currentTop + 'px';
-                var height = parseInt(style.height.slice(0, -2));
-                var width = parseInt(style.width.slice(0, -2));
+                var height = child.height;
+                var width = child.width;
                 currentTop = currentTop + height;
                 if(width > maxWidth) {
                     maxWidth = width;
@@ -45,7 +45,7 @@ fnc.uiControls.panels.stackpanel = (function () {
         //create this.dom as per parent
         panel.prototype.render.call(this, options);
 
-        this.renderChildren();
+        this.renderChildren({available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
         setChildrenOrientation.call(this);
         return this.dom;
     };

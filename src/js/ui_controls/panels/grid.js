@@ -46,7 +46,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseRowHeights = function() {
             if(this.properties['rowheights']) {
-                parseCompositeProperty.call(this, this.properties['rowheights'], this.height, this.rows, 'height');
+                parseCompositeProperty.call(this, this.properties['rowheights'], parseInt(this.dom.style.height), this.rows, 'height');
                 var rows = this["rows"];
                 var currentTop = 0;
                 for (var i = 0, row; row = rows[i]; i++) {
@@ -58,7 +58,7 @@ fnc.uiControls.panels.grid = (function () {
 
         var parseColWidths = function() {
             if(this.properties['colwidths']) {
-                parseCompositeProperty.call(this, this.properties['colwidths'], this.width, this.cols, 'width');
+                parseCompositeProperty.call(this, this.properties['colwidths'], parseInt(this.dom.style.width), this.cols, 'width');
                 var cols = this["cols"];
                 var currentLeft = 0;
                 for (var i = 0, col; col = cols[i]; i++) {
@@ -76,7 +76,7 @@ fnc.uiControls.panels.grid = (function () {
         parseRowHeights.call(this);
         parseColWidths.call(this);
 
-        this.renderChildren();
+        this.renderChildren({available_height: parseInt(this.dom.style.height), available_width: parseInt(this.dom.style.width)});
         return this.dom;
     };
     return grid;
