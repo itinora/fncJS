@@ -9,7 +9,10 @@
   "description": "JavaScript framework for commoners",
   "main": ["./dist/fnc.js","./dist/fnc.min.js"],
   "keywords": [
-    "fncjs"
+    "fncjs",
+    "framework",
+    "browser",
+    "client-side"
   ],
   "license": "MIT",
   "ignore": [

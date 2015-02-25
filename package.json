@@ -1,16 +1,35 @@
 {
-    "name": "fncJS",
-    "dependencies": {
-        "gulp": "^3.8.8",
-        "gulp-watch": "^3.0.0",
-        "gulp-concat": "^2.4.1",
-        "gulp-uglify": "^1.0.1",
-        "through": "^2.3.6",
-        "through2": "^0.6.3",
-        "gulp-util": "^3.0.1",
-        "uglify-js": "^2.4.15",
-        "deepmerge": "^0.2.7",
-        "vinyl-sourcemaps-apply": "^0.1.4",
-        "concat-with-sourcemaps": "^0.1.6"
-    }
+  "name": "fnc",
+  "version": "0.0.1",
+  "description": "JavaScript framework for commoners",
+  "main": ["./dist/fnc.js","./dist/fnc.min.js"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:itinora/fncJS.git"
+  },
+  "keywords": [
+    "fncjs",
+    "framework",
+    "browser",
+    "client-side"
+  ],
+  "author": "Itinora Team <code@itinora.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/itinora/fncJS",
+  "dependencies": {
+    "gulp": "^3.8.8",
+    "gulp-watch": "^3.0.0",
+    "gulp-concat": "^2.4.1",
+    "gulp-uglify": "^1.0.1",
+    "through": "^2.3.6",
+    "through2": "^0.6.3",
+    "gulp-util": "^3.0.1",
+    "uglify-js": "^2.4.15",
+    "deepmerge": "^0.2.7",
+    "vinyl-sourcemaps-apply": "^0.1.4",
+    "concat-with-sourcemaps": "^0.1.6"
+  }
 }
