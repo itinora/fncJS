@@ -1,0 +1,25 @@
+{
+  "name": "fncjs",
+  "version": "0.0.1",
+  "homepage": "https://github.com/itinora/fncJS",
+  "authors": [
+    "Souvik Basu <souvikbasu@gmail.com>",
+    "Ashish Dasnurkar <ashish.dasnurkar@gmail.com>"
+  ],
+  "description": "JavaScript framework for commoners",
+  "main": ["./dist/fnc.js","./dist/fnc.min.js"],
+  "keywords": [
+    "fncjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "webcomponentsjs": "~0.5.5"
+  }
+}
