@@ -1,5 +1,5 @@
 {
-  "name": "fnc",
+  "name": "fncjs",
   "version": "0.0.1",
   "description": "JavaScript framework for commoners",
   "main": ["./dist/fnc.js","./dist/fnc.min.js"],
